@@ -8,11 +8,6 @@
 <body>
     <?php include '../includes/header.php'; ?> <!-- Incluindo o header -->
 
-    <h1>Ver Todas</h1>
-
-    <?php
-        relatorio($pdo);
-        ?>
 
 </body>
 </html>
