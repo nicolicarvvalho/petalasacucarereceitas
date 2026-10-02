@@ -1,4 +1,8 @@
-<?php require '../includes/functions.php'; ?>
+<?php 
+require_once '../database/conexao.php';
+require '../includes/functions.php'; 
+require_once __DIR__ . '/../login/verificaUser.php';
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">

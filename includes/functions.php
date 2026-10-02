@@ -1,4 +1,5 @@
-<?php require_once __DIR__ . '/../conexao.php'; ?>
+<?php
+require_once __DIR__ . '/../database/conexao.php';?>
 
 <?php function cadastrar($pdo, $usuario_id, $categoria, $nome, $ingredientes, $modo_preparo, $tempo_preparo, $imagem, $diiculdade){
   
@@ -25,41 +26,45 @@
 ///falta ver se está funcionando:
 
 function verTodas($pdo) {
-        $sql = "SELECT * FROM receitas ORDER BY nome";
+    $sql = "SELECT * FROM receitas ORDER BY nome";
 
-        try {
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-
-            $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            foreach ($receitas as $receitas) {
-                echo "usuario_id: {$usuario_id['usuario_id']}<br>";
-                echo "categoria: {$categoria['categoria']}<br>";
-                echo "nome: {$nome['nome']}<br>";
-                echo "ingredientes: {$ingredientes['ingredientes']}<br>";
-                echo "modo_preparo: {$modo_preparo['modo_preparo']}<br>";
-                echo "tempo_preparo: {$tempo_preparo['tempo_preparo']}<br>";
-                echo "imagem: {$imagem['imagem']}<br>";
-                echo "diiculdade: {$diiculdade['diiculdade']}<br>";
-                echo "<hr>";
-            }
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
-}
-
-function apagar($conexao, $nome){
-    $sql = "DELETE FROM receitas WHERE nome = :nome";
     try {
-        $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(":nome", $nome);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        echo "Receita removida com sucesso!";
+
+        $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($receitas as $receita) {
+            echo "usuario_id: {$receita['usuario_id']}<br>";
+            echo "categoria: {$receita['categoria']}<br>";
+            echo "nome: {$receita['nome']}<br>";
+            echo "ingredientes: {$receita['ingredientes']}<br>";
+            echo "modo_preparo: {$receita['modo_preparo']}<br>";
+            echo "tempo_preparo: {$receita['tempo_preparo']}<br>";
+            echo "imagem: {$receita['imagem']}<br>";
+            echo "dificuldade: {$receita['diiculdade']}<br>";
+            echo "<hr>";
+        }
+
     } catch (PDOException $e) {
         echo "Erro: " . $e->getMessage();
     }
+}
+
+function apagar($conexao, $id) { // o usuáiro não vai ver o id, apenas o sistema
+    $sql = "DELETE FROM receitas WHERE id = :id";
+
+    try {
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return true;
+    } catch (PDOException $e) {
+        echo "Erro ao apagar receita: " . $e->getMessage();
+        return false;
     }
+}
     
 
 function pesquisar($conexao, $nome){
@@ -98,23 +103,24 @@ function pesquisar($conexao, $nome){
 //Funções para login:
 
 // Esses já estão certos
-function cadastraUser($pdo, $email, $senha){
+function cadastraUser($pdo, $email, $senha) {
 
+    $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
 
-        $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
+    try {
 
-        try {
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(":email",  $email);
-            $stmt->bindParam(":senha",  $senha);
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":senha", $senha);
+        $stmt->execute();
 
-            $stmt->execute();
-            echo "Usuário cadastrado com sucesso!";
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
 }
-
 function consulta_user($pdo, $email){
 
 $sql = "SELECT id, email, senha FROM usuarios WHERE email = :email";

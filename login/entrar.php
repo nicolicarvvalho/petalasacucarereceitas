@@ -1,5 +1,8 @@
 <!-- Esse já está certo -->
-<?php require_once __DIR__ . '/../includes/functions.php'; ?>
+<?php require_once __DIR__ . '/../includes/functions.php'; 
+require_once '../database/conexao.php';
+
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -12,7 +15,7 @@
 
 <body>
     <div>
-        <h1>Criar conta</h1>
+        <h1>Entrar</h1>
 
         <form action="" method="post">
 

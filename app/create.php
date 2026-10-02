@@ -1,6 +1,7 @@
 <?php
-require_once '../conexao.php';
+require_once '../database/conexao.php';
 require_once '../includes/functions.php';
+require_once __DIR__ . '/../login/verificaUser.php';
 ?>
 
 <!DOCTYPE html>
@@ -25,10 +26,10 @@ require_once '../includes/functions.php';
 
         <!-- Categoria doce ou salgada (name mudado para categoria) -->
         <label for="categoria">Categoria: </label>
-        <input type="radio" name="categoria" id="categ1" value="Doce ">
-        <label for="categ1">Doce</label>
-        <input type="radio" name="categoria" id="categ2" value="Salgado">
-        <label for="categ2">Salgado</label><br>
+        <input type="radio" name="categoria" id="doce" value="Doce ">
+        <label for="doce">Doce</label>
+        <input type="radio" name="categoria" id="salgado" value="Salgado">
+        <label for="salgado">Salgado</label><br>
 
         <!-- Ingredientes -->
         <label for="ingredientes">Ingredientes: </label><br>
@@ -40,12 +41,12 @@ require_once '../includes/functions.php';
 
         <!-- Dificuldade (name mudado para diiculdade) -->
         <label for="dificuldade">Dificuldade: </label>
-        <input type="radio" id="opcao1" name="diiculdade" value="valor1">
-        <label for="opcao1">Fácil </label>
-        <input type="radio" id="opcao2" name="diiculdade" value="valor2">
-        <label for="opcao2">Médio</label>
-        <input type="radio" id="opcao3" name="diiculdade" value="valor3">
-        <label for="opcao3">Difícil</label>
+        <input type="radio" id="facil" name="diiculdade" value="facil">
+        <label for="facil">Fácil </label>
+        <input type="radio" id="medio" name="diiculdade" value="medio">
+        <label for="medio">Médio</label>
+        <input type="radio" id="dificil" name="diiculdade" value="dificil">
+        <label for="dificl">Difícil</label>
 
 
         <!-- Tempo em minutos ou horas -->
