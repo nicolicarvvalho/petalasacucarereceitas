@@ -1,21 +1,20 @@
-<?php 
-require_once __DIR__ . '/../database/connect.php';
+<?php
+require_once __DIR__ . '/../database/conexao.php';?>
 
-function cadastrar($conexao, $usuario_id, $categoria, $nome, $ingredientes, $modo_preparo, $tempo_preparo, $imagem, $dificuldade){
+<?php function cadastrar($pdo, $usuario_id, $categoria, $nome, $ingredientes, $modo_preparo, $tempo_preparo, $imagem, $diiculdade){
   
-        $sql = "INSERT INTO receitas (usuario_id, categoria, nome, ingredientes, modo_preparo, tempo_preparo, imagem, dificuldade) VALUES (:usuario_id, :categoria, :nome, :ingredientes, :modo_preparo, :tempo_preparo, :imagem, :dificuldade)";
+        $sql = "INSERT INTO receitas (usuario_id, categoria, nome, ingredientes, modo_preparo, tempo_preparo, imagem, diiculdade) VALUES (:usuario_id, :categoria, :nome, :ingredientes, :modo_preparo, :tempo_preparo, :imagem, :diiculdade)";
 
         try {
-            $stmt = $conexao->prepare($sql);
+            $stmt = $pdo->prepare($sql);
             $stmt->bindParam(":usuario_id", $usuario_id);
             $stmt->bindParam(":categoria", $categoria);
             $stmt->bindParam(":nome",  $nome);
             $stmt->bindParam(":ingredientes",  $ingredientes);
             $stmt->bindParam(":modo_preparo",  $modo_preparo);
-            $stmt->bindParam(":tempo_preparo", $tempo_preparo);
-            $stmt->bindParam(":imagem", $imagem);
-            $stmt->bindParam(":dificuldade", $dificuldade);
-
+            $stmt->bindParam(":tempo_preparo",  $tempo_preparo);
+            $stmt->bindParam(":imagem",  $imagem);
+            $stmt->bindParam(":diiculdade",  $diiculdade);
 
             $stmt->execute();
             echo "Receita inserida com sucesso!";
@@ -24,117 +23,110 @@ function cadastrar($conexao, $usuario_id, $categoria, $nome, $ingredientes, $mod
         }
 }
 
-function relatorio($conexao) {
-        $sql = "SELECT * FROM receitas ORDER BY nome";
+///falta ver se está funcionando:
 
-         try {
-        $stmt = $conexao->prepare($sql);
+function verTodas($pdo) {
+    $sql = "SELECT * FROM receitas ORDER BY nome";
+
+    try {
+        $stmt = $pdo->prepare($sql);
         $stmt->execute();
 
-        // 1. Guarda todos os resultados na variável $lista_receitas
-        $lista_receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // 2. O foreach passa por cada "receita" individual da "lista_receitas"
-        foreach ($lista_receitas as $receita) {
-            echo "id: {$receita['id']}<br>";
-            echo "nome: {$receita['nome']}<br>";
-            echo "categoria: {$receita['categoria']}<br>";
-            echo "ingredientes: {$receita['ingredientes']}<br>";
-            echo "modo de preparo: {$receita['modo_preparo']}<br>";
-            echo "tempo de preparo: {$receita['tempo_preparo']}<br>";
-            echo "dificuldade: {$receita['dificuldade']}<br>";
+        foreach ($receitas as $receita) {
             echo "usuario_id: {$receita['usuario_id']}<br>";
+            echo "categoria: {$receita['categoria']}<br>";
+            echo "nome: {$receita['nome']}<br>";
+            echo "ingredientes: {$receita['ingredientes']}<br>";
+            echo "modo_preparo: {$receita['modo_preparo']}<br>";
+            echo "tempo_preparo: {$receita['tempo_preparo']}<br>";
+            echo "imagem: {$receita['imagem']}<br>";
+            echo "dificuldade: {$receita['diiculdade']}<br>";
             echo "<hr>";
         }
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+    }
 }
 
-function apagar($conexao, $nome){
-    $sql = "DELETE FROM receitas WHERE nome = :nome";
+function apagar($conexao, $id) { // o usuáiro não vai ver o id, apenas o sistema
+    $sql = "DELETE FROM receitas WHERE id = :id";
+
     try {
         $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+
+        return true;
+    } catch (PDOException $e) {
+        echo "Erro ao apagar receita: " . $e->getMessage();
+        return false;
+    }
+}
+    
+
+function pesquisar($conexao, $nome){
+
+    $sql = "SELECT usuario_id, categoria, nome, ingredientes, tempo_preparo, modo_preparo, imagem, diiculdade 
+            FROM receitas 
+            WHERE nome LIKE :nome";
+
+    try{
+
+        $stmt = $conexao->prepare($sql);
+        $nome = "%" . $nome . "%"; // nessa parte o php pega a palavra digitada pelo usuário e a coloca entre %. Desse jeito o banco de dados interpreta algo como 'procure %$nome% em qualquer parte do nome'
         $stmt->bindParam(":nome", $nome);
         $stmt->execute();
-        echo "Receita removida com sucesso!";
-    } catch (PDOException $e) {
-        echo "Erro: " . $e->getMessage();
-    }
-    }
-    
+        $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC); // O fetch all procura em tudo
 
-function consultar($conexao, $nome_busca) {
-
-    $sql = "SELECT * FROM receitas WHERE nome LIKE :nome"; // LIKE serve para buscar textos por aproximação
-
-    try {
-        $stmt = $conexao->prepare($sql);
-        
-        $stmt->execute([':nome' => "%" . $nome_busca . "%"]); // % fica antes e depois do que foi buscado, é como se ele perguntasse ao banco "ache tudo que tenha nome_busca"
-
-        $lista_receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Mostra os resultados na tela
-        foreach ($lista_receitas as $receita) {
-            echo "nome: {$receita['nome']} - categoria: {$receita['categoria']}<br>";
+        foreach ($receitas as $receita) { //Com a ajuda do foreach passa por cada receita
+            echo "Usuario_id: {$receita['usuario_id']}<br>";
+            echo "Categoria: {$receita['categoria']}<br>";
+            echo "Nome: {$receita['nome']}<br>";
+            echo "Ingredientes: {$receita['ingredientes']}<br>";
+            echo "Tempo: {$receita['tempo_preparo']}<br>";
+            echo "Modo de preparo: {$receita['modo_preparo']}<br>";
+            echo "Imagem: {$receita['imagem']}<br>";
+            echo "Dificuldade: {$receita['diiculdade']}<br>";
+            echo "<hr>";
         }
 
     } catch (PDOException $e) {
+
         echo "Erro: " . $e->getMessage();
+
     }
-}
-
-    
-
-function atualizar($conexao, $usuario_id, $categoria, $nome, $ingredientes, $modo_preparo, $tempo_preparo, $imagem, $dificuldade){
-  
-        $sql = "INSERT INTO receitas (usuario_id, categoria, nome, ingredientes, modo_preparo, tempo_preparo, imagem, dificuldade) VALUES (:usuario_id, :categoria, :nome, :ingredientes, :modo_preparo, :tempo_preparo, :imagem, :dificuldade)";
-
-        try {
-            $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":usuario_id", $usuario_id);
-            $stmt->bindParam(":categoria", $categoria);
-            $stmt->bindParam(":nome",  $nome);
-            $stmt->bindParam(":ingredientes",  $ingredientes);
-            $stmt->bindParam(":modo_preparo",  $modo_preparo);
-            $stmt->bindParam(":tempo_preparo", $tempo_preparo);
-            $stmt->bindParam(":imagem", $imagem);
-            $stmt->bindParam(":dificuldade", $dificuldade);
-
-
-            $stmt->execute();
-            echo "Receita atualizada com sucesso!";
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
 }
 
 //Funções para login:
 
-function cadastra_user($conexao, $email, $senha){
+// Esses já estão certos
+function cadastraUser($pdo, $email, $senha) {
 
+    $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
 
-        $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
+    try {
 
-        try {
-            $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(":email",  $email);
-            $stmt->bindParam(":senha",  $senha);
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":senha", $senha);
+        $stmt->execute();
 
-            $stmt->execute();
-            echo "Usuário cadastrado com sucesso!";
-        } catch (PDOException $e) {
-            echo "Erro: " . $e->getMessage();
-        }
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
 }
-
-function consulta_user($conexao, $email){
+function consulta_user($pdo, $email){
 
 $sql = "SELECT id, email, senha FROM usuarios WHERE email = :email";
 
 try{
-$stmt = $conexao->prepare($sql);
+$stmt = $pdo->prepare($sql);
 $stmt->bindParam(":email", $email);
 $stmt->execute();
 
