@@ -105,22 +105,32 @@ function pesquisar($conexao, $nome){
 // Esses já estão certos
 function cadastraUser($pdo, $email, $senha) {
 
-    $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
+    // O sistema define a foto inicial do usuário
+    $fotoperfil = 'perfil/padrao.png';
+
+    $sql = "INSERT INTO usuarios (email, senha, fotoperfil)
+            VALUES (:email, :senha, :fotoperfil)";
 
     try {
 
         $stmt = $pdo->prepare($sql);
+
         $stmt->bindParam(":email", $email);
         $stmt->bindParam(":senha", $senha);
+        $stmt->bindParam(":fotoperfil", $fotoperfil);
+
         $stmt->execute();
 
         return true;
 
     } catch (PDOException $e) {
+
         echo "Erro: " . $e->getMessage();
         return false;
     }
 }
+
+
 function consulta_user($pdo, $email){
 
 $sql = "SELECT id, email, senha FROM usuarios WHERE email = :email";
@@ -136,4 +146,109 @@ return $usuario;
     echo "Erro: ". $e->getMessage();
 }
 }
+
+
+//Função para o crud do usuário:
+
+function consulta_id($pdo, $usuario_id) {
+    $sql = "SELECT id, email, fotoperfil
+            FROM usuarios
+            WHERE id = :id";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":id", $usuario_id);
+        $stmt->execute();
+
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $usuario;
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
+}
+
+
+function atualizaEmail($pdo, $usuario_id, $email) {
+    $sql = "UPDATE usuarios
+            SET email = :email
+            WHERE id = :id";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":id", $usuario_id);
+
+        $stmt->execute();
+
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
+}
+
+
+function atualizaSenha($pdo, $usuario_id, $senha) {
+    $sql = "UPDATE usuarios
+            SET senha = :senha
+            WHERE id = :id";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindParam(":senha", $senha);
+        $stmt->bindParam(":id", $usuario_id);
+
+        $stmt->execute();
+
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
+}
+
+
+function atualizaFoto($pdo, $usuario_id, $fotoperfil) {
+    $sql = "UPDATE usuarios
+            SET fotoperfil = :fotoperfil
+            WHERE id = :id";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->bindParam(":fotoperfil", $fotoperfil);
+        $stmt->bindParam(":id", $usuario_id);
+
+        $stmt->execute();
+
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro: " . $e->getMessage();
+        return false;
+    }
+}
+
+function excluirUsuario($pdo, $usuario_id) {
+    $sql = "DELETE FROM usuarios WHERE id = :id";
+
+    try {
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":id", $usuario_id);
+        $stmt->execute();
+
+        return true;
+
+    } catch (PDOException $e) {
+        echo "Erro ao excluir usuário: " . $e->getMessage();
+        return false;
+    }
+}
+
 ?>

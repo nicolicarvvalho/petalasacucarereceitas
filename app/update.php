@@ -73,9 +73,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") { // se o formulário for enviado: faça o cadastro
 
-    // Pega o ID da sessão se existir, se não usa 1
-    $usuario_id = $_SESSION['usuario_id'] ?? 1; // criando uma varoável e atribuindo o id 1 para ela. Ele fala quase como 'pegue o usuário e se não tiver nada atribua o id 1"
-
+    $usuario_id = $_SESSION['usuario_id'];
 
     $imagem = null; // essa variável não tem nenhum valor, o usuário pode ou não escolher uma imagem
 

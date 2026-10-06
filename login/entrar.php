@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($usuario && $usuario['senha'] === $senha) {
 
         $_SESSION['usuario_id'] = $usuario['id'];
-
         header("Location: ../inicio.php");
         exit();
     } else {
@@ -75,9 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
 
         .logo img {
-            width: 150%;
-            max-width: none;
+            width: 100%;
+            max-width: 500px;
             height: auto;
+            display: block;
         }
 
 
@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             justify-content: center;
             align-items: center;
             padding: 40px;
+            transform: translateX(50px);
         }
 
         .entrar {
