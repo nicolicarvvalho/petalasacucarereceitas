@@ -61,7 +61,6 @@
             gap: 30px;               /* Controla a distância entre os dois lados (diminua o número para aproximar mais) */
             align-items: flex-end;   /* Alinha a base dos botões */
             padding: 25px 40px;
-            border-top: 2px solid #000000;
             background-color: #d63765;
             width: 100%;
         }

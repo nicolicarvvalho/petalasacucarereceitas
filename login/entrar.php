@@ -1,4 +1,3 @@
-<!-- Esse já está certo -->
 <?php
 
 require_once __DIR__ . '/../includes/functions.php';
@@ -133,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             opacity: 0.7;
         }
 
+        /*Aqui para baixo é o botão de salvar: */
         .botaos {
             display: block;
             width: 100%;
@@ -152,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             background-color: #f6edde;
         }
 
+        /*Aqui para baixo é o botão de limpar: */
         .botaol {
             display: block;
             width: 100%;
@@ -166,23 +167,51 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         .botaol:hover {
             opacity: 1;
+            /* Isso aqui é para quando o mouse passa por cima*/
+        }
+
+        /*Aqui para baixo é o botão de voltar: */
+        .botaov {
+            display: block;
+            width: 30%;
+            background-color: transparent;
+            color: #f6edde;
+            border: 1px solid #f6edde;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.8;
+            margin-top: 10px;
+            margin-left: auto;   /* Centraliza na horizontal */
+            margin-right: auto;  /* Centraliza na horizontal */
+            box-sizing: border-box;
+            transition: opacity 0.2s;
+}          
+
+        .botaov:hover {
+            opacity: 1;
+            background-color: #f6edde;
+            color: #d63765;
+        }
+
+        .pergunta {
+            display: block;
+            font-size: 14px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            color: #f6edde;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 5px;
         }
     </style>
-
-
-
-
-
-
-
-
-
 
 </head>
 
 <body>
-    <div class="telaEntrar">
 
+    <div class="telaEntrar">
 
         <div class="ladoEsquerdo">
             <div class="logo">
@@ -206,10 +235,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
                 </div>
 
-
-
                 <input type="submit" value="Entrar" class="botaos">
                 <input type="reset" value="Limpar " class="botaol">
+
+                <label for="criarConta" class="pergunta">Ainda não tem conta? Clique no botão abaixo e cadastre-se!</label>
+                <a href="./cadastrar.php" class="botaov">Voltar</a> <!-- Botão de voltar volta para a tela de cadastrar -->
             </form>
 
 
@@ -222,25 +252,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             <?php endif; ?>
 
-
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </div><!-- Essa fecha o telaEntrar -->
-
-
+    </div><!-- Essa fecha a div telaEntrar -->
 
 </body>
 

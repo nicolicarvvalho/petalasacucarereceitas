@@ -5,18 +5,20 @@ $erro = '';
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $email = $_POST['email'] ?? '';
     $senha = $_POST['senha'] ?? '';
-    // Cadastra o novo usuário
-    if (cadastraUser($pdo, $email, $senha)) {
-        // Depois de cadastrar, vai para a página inicial
-        header("Location: ../inicio.php");
-        exit();
-    } else {
-        $erro = "Não foi possível criar a conta.";
+    
+    try {
+        if (cadastraUser($pdo, $email, $senha)) {
+            // Depois de cadastrar, vai para a página inicial
+            header("Location: ../inicio.php");
+            exit();
+        } else {
+            $erro = "Não foi possível criar a conta.";
+        }
+    } catch (PDOException $e) {
+        $erro = "Não foi possível criar a conta. Tente novamente.";
     }
 }
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -24,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pétalas, Açúcar e Receitas</title>
+    <title>Pétalas, Açúcar e Receitas - Cadastrar</title>
 
     <style>
         body {
@@ -38,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             min-height: 100vh;
         }
 
-        .telaCadastro {
+        .telaEntrar {
             display: flex;
             width: 900px;
             max-width: 95%;
@@ -63,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         .logo img {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             height: auto;
             display: block;
         }
@@ -79,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             transform: translateX(50px);
         }
 
-        .cadastro {
+        .entrar {
             width: 100%;
             max-width: 320px;
         }
@@ -120,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             opacity: 0.7;
         }
 
+        /* Botão de enviar */
         .botaos {
             display: block;
             width: 100%;
@@ -139,44 +142,99 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             background-color: #f6edde;
         }
 
+        /* Botão de limpar */
         .botaol {
-            display: none;
+            display: block;
+            width: 100%;
+            background-color: transparent;
+            color: #f6edde;
+            border: 1px solid #f6edde;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .botaol:hover {
+            opacity: 1;
+        }
+
+        /* Botão de voltar/login */
+        .botaov {
+            display: block;
+            width: 30%;
+            background-color: transparent;
+            color: #f6edde;
+            border: 1px solid #f6edde;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.8;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            transition: opacity 0.2s;
+        }          
+
+        .botaov:hover {
+            opacity: 1;
+            background-color: #f6edde;
+            color: #d63765;
+        }
+
+        .pergunta {
+            font-size: 14px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            color: #f6edde;
+            display: block;
+            margin-top: 15px;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <div class="telaCadastro">
+
+    <div class="telaEntrar">
+
         <div class="ladoEsquerdo">
             <div class="logo">
                 <img src="../imagens/logos.png" alt="Pétalas, Açúcar e Receitas Logo">
             </div>
         </div>
+
         <div class="ladoDireito">
+
             <h1>Criar Conta</h1>
-            <form action="" method="post" class="cadastro">
+
+            <form action="" method="post" class="entrar">
+
                 <div class="email">
-                    <label for="email">E-mail:</label>
+                    <label for="email">E-mail: </label>
                     <input type="email" name="email" id="email" placeholder="Digite seu e-mail" required>
                 </div>
+
                 <div class="email">
-                    <label for="senha">Senha:</label>
+                    <label for="senha">Senha: </label>
                     <input type="password" name="senha" id="senha" placeholder="Digite uma senha forte" required>
                 </div>
+
                 <input type="submit" value="Criar Conta" class="botaos">
-                <input type="reset" value="Limpar Campos" class="botaol">
+                <input type="reset" value="Limpar" class="botaol">
             </form>
+
+            <?php if (!empty($erro)): ?>
+                <p style="color: #F7EFE1; margin-top: 15px; text-align: center; font-family: sans-serif; font-size: 0.9rem;">
+                    <?php echo $erro; ?>
+                </p>
+            <?php endif; ?>
+
         </div>
+
     </div>
-
-    <!-- Isso aqui é para caso o usuário digite uma senha ou usuário errado a mensagem de erro não fique feia -->
-    <?php if (!empty($erro)): ?>
-
-        <p style="color: #F7EFE1; margin-top: 15px; text-align: center; font-family: sans-serif; font-size: 0.9rem;">
-
-            <?php echo $erro; ?>
-        </p>
-    <?php endif; ?>
 
 </body>
 

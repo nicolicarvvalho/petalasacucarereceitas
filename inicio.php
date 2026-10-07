@@ -42,6 +42,9 @@ $total = count($imagens);
 
     <title>Pétalas, Açúcar e Receitas</title>
 
+        <link rel="icon" type="image/png" href="./imagens/logo32.png">
+
+
     <style>
         * {
             box-sizing: border-box;
@@ -50,7 +53,7 @@ $total = count($imagens);
         body {
             margin: 0;
             padding: 0;
-            background-color: #faf2e6;
+            background-color: #fcf8f3;
         }
 
         /* Área da conta */
