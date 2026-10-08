@@ -1,6 +1,6 @@
 <?php
 
-require_once '../database/conexao.php'; // Faz a conexão com o postgres
+require_once __DIR__ . '/../database/conexao.php'; // Faz a conexão com o postgres
 
 require_once __DIR__ . '/../includes/functions.php'; //Carregas as funções
 

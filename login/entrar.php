@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../includes/functions.php';
-require_once '../database/conexao.php';
+require_once __DIR__ . '/../database/conexao.php';
 
 session_start();
 
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($usuario && $usuario['senha'] === $senha) {
 
         $_SESSION['usuario_id'] = $usuario['id'];
-        header("Location: ../inicio.php");
+        header("Location: ../app/inicio.php");
         exit();
     } else {
 

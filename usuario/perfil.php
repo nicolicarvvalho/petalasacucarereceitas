@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '../includes/functions.php';
-require_once __DIR__ . '../login/verificaUser.php';
+require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../login/verificaUser.php';
 
 $usuario_id = $_SESSION['usuario_id'];
 
@@ -143,7 +143,7 @@ $base = '../';
 
 <body>
 
-    <?php include '../includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
 
 
     <main class="perfil">
@@ -166,7 +166,7 @@ $base = '../';
 
     </main>
 
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 
 </body>

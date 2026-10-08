@@ -1,6 +1,6 @@
 <?php
 
-require_once '../database/conexao.php';
+require_once __DIR__ . '/../database/conexao.php';
 
 require_once __DIR__ . '/../includes/functions.php';
 
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
 
-        $pasta = '../imagens/receitas/';
+        $pasta = __DIR__ . '../imagens/receitas/';
 
         // Cria a pasta caso ela ainda não exista
 
@@ -555,7 +555,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
 
-    <?php include '../includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
 
     <main class="principal">
 
@@ -677,7 +677,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     </main>
 
-    <?php include '../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 
