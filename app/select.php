@@ -18,7 +18,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
         .card-receita {
             width: 240px;
             padding: 20px;
-            background-color: #f0e5d2;
+            background-color: #fbf5e9;;
             margin: 15px;
             display: inline-block;
             vertical-align: top;
