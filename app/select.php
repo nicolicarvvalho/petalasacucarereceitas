@@ -10,7 +10,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ver Todas</title>
+    <title>Pétalas, Açúcar e Receitas</title>
 
     <link rel="icon" type="image/png" href="../imagens/logo32.png">
 
@@ -18,10 +18,11 @@ require_once __DIR__ . '/../login/verificaUser.php';
         .card-receita {
             width: 240px;
             padding: 20px;
-            background-color: #fbf5e9;;
+            background-color: #f0e5d2;
             margin: 15px;
             display: inline-block;
             vertical-align: top;
+            border: 3px solid #d63765;
         }
 
         .card-receita img {

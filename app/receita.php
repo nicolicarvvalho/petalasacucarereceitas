@@ -33,9 +33,7 @@ if ($id != '') {
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Pétalas, Açúcar e Receitas</title>
 
     <link rel="icon" type="image/png" href="../imagens/logo32.png">
@@ -66,16 +64,32 @@ if ($id != '') {
             margin-bottom: 35px;
         }
 
-        .imagem-receita {
-            width: 100%;
-            max-width: 500px;
-            height: 300px;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 30px;
+        /* Layout em duas colunas (Imagem na esquerda, conteúdo na direita) */
+        .conteudo-receita {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
         }
 
+        /* Quadro da foto com borda rosa */
+        .quadro-imagem {
+            width: 280px;
+            height: 280px;
+            flex-shrink: 0;
+            border: 2px solid #d63765;
+            background-color: #f0e5d2;
+        }
+
+        .quadro-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Container do bloco de dados da receita */
         .receita {
+            flex: 1;
             background-color: #f0e5d2;
             padding: 30px;
         }
@@ -84,10 +98,12 @@ if ($id != '') {
             color: #d63765;
             margin-top: 0;
             font-size: 1.7rem;
+            margin-bottom: 20px;
         }
 
         .receita p {
             line-height: 1.6;
+            margin-bottom: 15px;
         }
 
         .receita strong {
@@ -113,6 +129,24 @@ if ($id != '') {
             font-weight: bold;
         }
 
+        /* Adaptador para telas menores/celulares */
+        @media (max-width: 768px) {
+            .conteudo-receita {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .quadro-imagem {
+                width: 100%;
+                max-width: 320px;
+                height: 260px;
+            }
+
+            .receita {
+                width: 100%;
+            }
+        }
+
     </style>
 
 </head>
@@ -127,44 +161,52 @@ if ($id != '') {
 
             <h1><?php echo htmlspecialchars($receita['nome']); ?></h1>
 
-            <?php if (!empty($receita['imagem'])): ?>
+            <div class="conteudo-receita">
 
-                <img src="../imagens/receitas/<?php echo htmlspecialchars($receita['imagem']); ?>" 
-                     alt="Imagem da receita" 
-                     class="imagem-receita">
+                <!-- Quadro da Imagem (Lado Esquerdo) -->
+                <div class="quadro-imagem">
+                    <?php 
+                    $caminho_imagem = "../imagens/receitas/" . $receita['imagem'];
+                    if (!empty($receita['imagem']) && file_exists(__DIR__ . '/' . $caminho_imagem)): 
+                    ?>
+                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" 
+                             alt="<?php echo htmlspecialchars($receita['nome']); ?>">
+                    <?php endif; ?>
+                </div>
 
-            <?php endif; ?>
+                <!-- Detalhes da Receita (Lado Direito) -->
+                <div class="receita">
 
-            <div class="receita">
+                    <h2>Informações da receita</h2>
 
-                <h2>Informações da receita</h2>
+                    <p>
+                        <strong>Categoria:</strong>
+                        <?php echo htmlspecialchars($receita['categoria']); ?>
+                    </p>
 
-                <p>
-                    <strong>Categoria:</strong>
-                    <?php echo htmlspecialchars($receita['categoria']); ?>
-                </p>
+                    <p>
+                        <strong>Dificuldade:</strong>
+                        <?php echo htmlspecialchars($receita['dificuldade'] ?? $receita['diiculdade'] ?? ''); ?>
+                    </p>
 
-                <p>
-                    <strong>Dificuldade:</strong>
-                    <?php echo htmlspecialchars($receita['diiculdade']); ?>
-                </p>
+                    <p>
+                        <strong>Tempo de preparo:</strong>
+                        <?php echo htmlspecialchars($receita['tempo_preparo']); ?>
+                    </p>
 
-                <p>
-                    <strong>Tempo de preparo:</strong>
-                    <?php echo htmlspecialchars($receita['tempo_preparo']); ?>
-                </p>
+                    <p>
+                        <strong>Ingredientes:</strong><br>
+                        <?php echo nl2br(htmlspecialchars($receita['ingredientes'])); ?>
+                    </p>
 
-                <p>
-                    <strong>Ingredientes:</strong><br>
-                    <?php echo nl2br(htmlspecialchars($receita['ingredientes'])); ?>
-                </p>
+                    <p>
+                        <strong>Modo de preparo:</strong><br>
+                        <?php echo nl2br(htmlspecialchars($receita['modo_preparo'])); ?>
+                    </p>
 
-                <p>
-                    <strong>Modo de preparo:</strong><br>
-                    <?php echo nl2br(htmlspecialchars($receita['modo_preparo'])); ?>
-                </p>
+                    <a href="select.php" class="voltar">Voltar para receitas</a>
 
-                <a href="select.php" class="voltar">Voltar para receitas</a>
+                </div>
 
             </div>
 

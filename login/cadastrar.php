@@ -1,4 +1,6 @@
 <?php
+session_start(); // Inicia a sessão para permitir o login automático
+
 require_once __DIR__ . '/../includes/functions.php';
 $erro = '';
 
@@ -8,9 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     
     try {
         if (cadastraUser($pdo, $email, $senha)) {
-            // Depois de cadastrar, vai para a página inicial
-            header("Location: ../inicio.php");
-            exit();
+            // Busca o usuário recém-criado para obter o ID e logar automaticamente
+            $usuario = consulta_user($pdo, $email);
+            
+            if ($usuario) {
+                $_SESSION['usuario_id'] = $usuario['id'];
+                
+                // Redireciona para a página inicial (caminho correto)
+                header("Location: ../app/inicio.php");
+                exit();
+            }
         } else {
             $erro = "Não foi possível criar a conta.";
         }
@@ -194,6 +203,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             text-align: center;
         }
     </style>
+
+        <link rel="icon" type="image/png" href="../imagens/logo32.png">
+
 </head>
 
 <body>

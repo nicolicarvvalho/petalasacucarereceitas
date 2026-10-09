@@ -386,11 +386,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //SERVER é uma variável super glob
 
                     <div class="opcoes">
 
-                        <input type="radio" name="categ" id="doce" value="True">
+                        <input type="radio" name="categ" id="doce" value="Doce">
 
                         <label for="doce">Doce</label>
 
-                        <input type="radio" name="categ" id="salgado" value="False">
+                        <input type="radio" name="categ" id="salgado" value="Salgado">
 
                         <label for="salgado">Salgado</label>
 

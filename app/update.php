@@ -5,6 +5,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
 $receita = null;
 $erro = '';
+$sucesso = '';
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {
     $nome = $_POST['nome'] ?? '';
@@ -24,15 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
     $id = $_POST['id'];
     $usuario_id = $_SESSION['usuario_id'];
-    $erro = '';
 
     if (empty($_POST['nome']) || empty($_POST['categoria']) || empty($_POST['ingredientes']) || empty($_POST['modo_preparo']) || empty($_POST['tempo']) || empty($_POST['diiculdade'])) {
         $erro = "Preencha todos os campos obrigatórios antes de atualizar a receita.";
 
-        $sql = "SELECT * FROM receitas WHERE id = :id AND usuario_id = :usuario_id";
+        $sql = "SELECT * FROM receitas WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":usuario_id", $usuario_id);
         $stmt->execute();
         $receita = $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
@@ -60,30 +59,50 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
             $imagem = 'imagens/' . $nomeImagem;
         }
 
-        $sql = "UPDATE receitas 
-                SET categoria = :categoria,
-                    nome = :nome,
-                    ingredientes = :ingredientes,
-                    modo_preparo = :modo_preparo,
-                    tempo_preparo = :tempo_preparo,
-                    imagem = :imagem,
-                    diiculdade = :diiculdade
-                WHERE id = :id AND usuario_id = :usuario_id";
+        try {
+            $sql = "UPDATE receitas 
+                    SET categoria = :categoria,
+                        nome = :nome,
+                        ingredientes = :ingredientes,
+                        modo_preparo = :modo_preparo,
+                        tempo_preparo = :tempo_preparo,
+                        imagem = :imagem,
+                        diiculdade = :diiculdade
+                    WHERE id = :id";
 
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(":categoria", $categoria);
+            $stmt->bindParam(":nome", $nome);
+            $stmt->bindParam(":ingredientes", $ingredientes);
+            $stmt->bindParam(":modo_preparo", $modo_preparo);
+            $stmt->bindParam(":tempo_preparo", $tempo_preparo);
+            $stmt->bindParam(":imagem", $imagem);
+            $stmt->bindParam(":diiculdade", $diiculdade);
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+
+            $sucesso = "Receita atualizada com sucesso!";
+        } catch (PDOException $e) {
+            $erro = "Erro ao atualizar receita: " . $e->getMessage();
+        }
+
+        // Recarrega os dados atualizados da receita para manter o formulário exibido e preenchido
+        $sql = "SELECT * FROM receitas WHERE id = :id";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":categoria", $categoria);
-        $stmt->bindParam(":nome", $nome);
-        $stmt->bindParam(":ingredientes", $ingredientes);
-        $stmt->bindParam(":modo_preparo", $modo_preparo);
-        $stmt->bindParam(":tempo_preparo", $tempo_preparo);
-        $stmt->bindParam(":imagem", $imagem);
-        $stmt->bindParam(":diiculdade", $diiculdade);
         $stmt->bindParam(":id", $id);
-        $stmt->bindParam(":usuario_id", $usuario_id);
         $stmt->execute();
+        $receita = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
 
-        header("Location: ../inicio.php");
-        exit();
+// Extrai o valor numérico e a unidade do tempo_preparo (ex: "30 minutos")
+$tempoNum = '';
+$tempoUnidade = 'minutos';
+if ($receita && !empty($receita['tempo_preparo'])) {
+    $partesTempo = explode(' ', trim($receita['tempo_preparo']));
+    $tempoNum = $partesTempo[0] ?? '';
+    if (isset($partesTempo[1])) {
+        $tempoUnidade = strtolower($partesTempo[1]);
     }
 }
 ?>
@@ -321,6 +340,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
             margin-bottom: 25px;
         }
 
+        .sucesso {
+            color: #2e7d32;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
         @media (max-width: 700px) {
             .principal {
                 padding: 0 25px 35px;
@@ -355,9 +380,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
 
     <main class="principal">
 
-        <?php if ($receita == null): ?>
+        <h1>Atualizar Receita</h1>
 
-            <h1>Atualizar Receita</h1>
+        <?php if ($erro != ''): ?>
+            <p class="erro"><?php echo htmlspecialchars($erro); ?></p>
+        <?php endif; ?>
+
+        <?php if ($sucesso != ''): ?>
+            <p class="sucesso"><?php echo htmlspecialchars($sucesso); ?></p>
+        <?php endif; ?>
+
+        <?php if ($receita == null): ?>
 
             <form action="update.php" method="POST">
 
@@ -376,41 +409,35 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
 
             </form>
 
-            <?php if ($erro != ''): ?>
-                <p class="erro"><?php echo $erro; ?></p>
-            <?php endif; ?>
-
         <?php else: ?>
-
-            <h1>Atualizar Receita</h1>
 
             <form action="update.php" method="POST" enctype="multipart/form-data">
 
                 <div class="formulario">
 
-                    <input type="hidden" name="id" value="<?php echo $receita['id']; ?>">
-                    <input type="hidden" name="imagem_atual" value="<?php echo $receita['imagem']; ?>">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($receita['id']); ?>">
+                    <input type="hidden" name="imagem_atual" value="<?php echo htmlspecialchars($receita['imagem'] ?? ''); ?>">
 
                     <div class="campo nome-campo">
                         <label for="nome">Nome da receita:</label>
-                        <input type="text" name="nome" id="nome" value="<?php echo $receita['nome']; ?>" required>
+                        <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($receita['nome']); ?>" required>
                     </div>
 
                     <div class="campo categoria-campo">
                         <label for="categoria">Categoria:</label>
 
                         <div class="opcoes">
-                            <input type="radio" name="categoria" id="categ1" value="Doce" <?php if ($receita['categoria'] == 'Doce') echo 'checked'; ?>>
+                            <input type="radio" name="categoria" id="categ1" value="Doce" <?php if (($receita['categoria'] ?? '') == 'Doce') echo 'checked'; ?>>
                             <label for="categ1">Doce</label>
 
-                            <input type="radio" name="categoria" id="categ2" value="Salgado" <?php if ($receita['categoria'] == 'Salgado') echo 'checked'; ?>>
+                            <input type="radio" name="categoria" id="categ2" value="Salgado" <?php if (($receita['categoria'] ?? '') == 'Salgado') echo 'checked'; ?>>
                             <label for="categ2">Salgado</label>
                         </div>
                     </div>
 
                     <div class="ingredientes">
                         <label for="ingredientes">Ingredientes:</label>
-                        <textarea id="ingredientes" name="ingredientes" required><?php echo $receita['ingredientes']; ?></textarea>
+                        <textarea id="ingredientes" name="ingredientes" required><?php echo htmlspecialchars($receita['ingredientes']); ?></textarea>
                     </div>
 
                     <div class="foto">
@@ -420,20 +447,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
 
                     <div class="preparo">
                         <label for="modo-preparo">Modo de Preparo:</label>
-                        <textarea id="modo-preparo" name="modo_preparo" required><?php echo $receita['modo_preparo']; ?></textarea>
+                        <textarea id="modo-preparo" name="modo_preparo" required><?php echo htmlspecialchars($receita['modo_preparo']); ?></textarea>
                     </div>
 
                     <div class="dificuldade">
                         <label for="dificuldade">Dificuldade:</label>
 
                         <div class="opcoes">
-                            <input type="radio" id="opcao1" name="diiculdade" value="valor1" <?php if ($receita['diiculdade'] == 'valor1') echo 'checked'; ?>>
+                            <input type="radio" id="opcao1" name="diiculdade" value="valor1" <?php if (($receita['diiculdade'] ?? '') == 'valor1') echo 'checked'; ?>>
                             <label for="opcao1">Fácil</label>
 
-                            <input type="radio" id="opcao2" name="diiculdade" value="valor2" <?php if ($receita['diiculdade'] == 'valor2') echo 'checked'; ?>>
+                            <input type="radio" id="opcao2" name="diiculdade" value="valor2" <?php if (($receita['diiculdade'] ?? '') == 'valor2') echo 'checked'; ?>>
                             <label for="opcao2">Médio</label>
 
-                            <input type="radio" id="opcao3" name="diiculdade" value="valor3" <?php if ($receita['diiculdade'] == 'valor3') echo 'checked'; ?>>
+                            <input type="radio" id="opcao3" name="diiculdade" value="valor3" <?php if (($receita['diiculdade'] ?? '') == 'valor3') echo 'checked'; ?>>
                             <label for="opcao3">Difícil</label>
                         </div>
                     </div>
@@ -442,11 +469,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
                         <label for="tempo">Tempo:</label>
 
                         <div class="tempo">
-                            <input type="number" id="tempo" name="tempo" min="1" placeholder="Ex: 30" required>
+                            <input type="number" id="tempo" name="tempo" min="1" value="<?php echo htmlspecialchars($tempoNum); ?>" placeholder="Ex: 30" required>
 
                             <select name="unidade">
-                                <option value="minutos">Minutos</option>
-                                <option value="horas">Horas</option>
+                                <option value="minutos" <?php if ($tempoUnidade == 'minutos') echo 'selected'; ?>>Minutos</option>
+                                <option value="horas" <?php if ($tempoUnidade == 'horas') echo 'selected'; ?>>Horas</option>
                             </select>
                         </div>
                     </div>
@@ -459,10 +486,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
                 </div>
 
             </form>
-
-            <?php if ($erro != ''): ?>
-                <p class="erro"><?php echo $erro; ?></p>
-            <?php endif; ?>
 
         <?php endif; ?>
 

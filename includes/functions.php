@@ -154,64 +154,56 @@ function apagar($conexao, $id)
 }
 
 function pesquisar($conexao, $nome)
-
 {
-
+    // Coluna "diiculdade" ajustada conforme o seu banco de dados
     $sql = "SELECT id, usuario_id, categoria, nome, ingredientes, tempo_preparo, modo_preparo, imagem, diiculdade 
             FROM receitas 
             WHERE nome ILIKE :nome
             ORDER BY nome";
 
     try {
-
         $stmt = $conexao->prepare($sql);
-
         $nome = "%" . $nome . "%";
-
         $stmt->bindParam(":nome", $nome);
-
         $stmt->execute();
 
         $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach ($receitas as $receita) {
+        if (empty($receitas)) {
+            echo "<p style='color: #d63765;'>Nenhuma receita encontrada com esse nome.</p>";
+            return;
+        }
 
+        foreach ($receitas as $receita) {
             echo "<div class='card-receita'>";
 
+            // Verifica se existe imagem cadastrada; caso contrário, usa a imagem padrão/placeholder
             if (!empty($receita['imagem'])) {
-
-                echo "<img src='../imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem da receita'>";
-
+                echo "<img src='../" . htmlspecialchars($receita['imagem']) . "' alt='Imagem de " . htmlspecialchars($receita['nome']) . "' onerror=\"this.onerror=null; this.src='../imagens/placeholder.png';\">";
+            } else {
+                // Foto padrão quando o usuário não tiver adicionado foto
+                echo "<img src='../imagens/placeholder.png' alt='Imagem não inserida'>";
             }
 
             echo "<h2>" . htmlspecialchars($receita['nome']) . "</h2>";
 
             echo "<p><strong>Categoria:</strong> "
-
                 . htmlspecialchars($receita['categoria'])
-
                 . "</p>";
 
             echo "<p><strong>Dificuldade:</strong> "
-
                 . htmlspecialchars($receita['diiculdade'])
-
                 . "</p>";
 
             echo "<a href='receita.php?id=" . $receita['id'] . "' class='botao-receita'>Ver receita</a>";
 
             echo "</div>";
-
         }
 
     } catch (PDOException $e) {
-
-        echo "Erro: " . $e->getMessage();
-
+        echo "Erro ao buscar receitas: " . $e->getMessage();
     }
-
 }
-
 //Funções para login:
 
 // Esses já estão certos
