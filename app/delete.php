@@ -6,12 +6,11 @@ require_once __DIR__ . '/../includes/functions.php'; //Carregas as funções
 
 require_once __DIR__ . '/../login/verificaUser.php'; //Verifica se o usuário está logado
 
-$receitas = [];
-$receita = null;
-$erro = '';
+$receitas = []; //isso aqui cria um array vazio. Essa variável guarda as receitas encontradas na pesquisa. Pode guardar várias porque o usuário pode ter receitas com nomes iguais ou parecidos.
+$receita = null; // null é a ausência de um valor. Essa variável é usada para guardar uma única receita que foi selecionada para confirmação da exclusão.
+$erro = '';// essa variável ainda não guarda nada
 
 /*Pesquisando pelo nome:*/
-
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) { //O usuário enviou o formulário? se sim:
 
     $nome = $_POST['nome'] ?? ''; // busque por receitas que tenham:
@@ -21,16 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) { //O us
             WHERE nome ILIKE :nome
             ORDER BY nome"; //ILIKE É uma comparação de texto do PostgreSQL que não diferencia maiúsculas de minúsculas.
 
-    $stmt = $pdo->prepare($sql); //prepara a consulta: liga o nome ao valor (tipo "bolo" para "%bolo%")
+    $stmt = $pdo->prepare($sql); //prepara a consulta: liga o nome ao valor (tipo "bolo" para "%bolo%"). O prepare() prepara a consulta SQL para receber os valores dos parâmetros. O $stmt guarda o objeto que representa essa consulta preparada.
 
     $busca = "%" . $nome . "%"; // pesquisa qualquer receita que tenha o nome digitado pelo usuário
 
-    $stmt->bindParam(":nome", $busca);
+    $stmt->bindParam(":nome", $busca); // O bindParam() associa o parâmetro :nome ao valor da variável $busca.
 
     $stmt->execute(); //executa
 
-    $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC); //fetch all procura tudo e guarda em receitas
+    $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC); //fetch all procura tudo e guarda em receitas. O PDO::FETCH_ASSOC indica que cada linha será representada por um array associativo, em que os nomes das colunas são as chaves.
 
+    //aqui ele verifica se achou alguma receita:
     if (empty($receitas)) { //empty pergunta se está vazio. Se não encontrou nenhuma receita, exibe:
 
         $erro = "Nenhuma receita encontrada.";
@@ -40,56 +40,52 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) { //O us
 }
 
 /*Aqui ele confirma a exclusão:*/
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['confirmar'])) { //Ele pergunta se a página recebeu um formulário usando o método post e se o botão de confirmar foi apertado. O PHP entra nesse bloco quando a requisição é POST e os dados recebidos tem confirmar.
 
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['confirmar'])) { //Ele pergunta se a página recebeu um formulário usando o método post e se o botão de confirmar foi apertado.
-
-    $id = $_POST['id']; // nessa parte o php pega o id que veio do formulário escondido. Eu não queria que o usuário visse o id porque normalmente você não liga qual id você é, você quer apenas usar o aplicativo ou o site
+    $id = $_POST['id']; // nessa parte o php pega o id que veio do formulário escondido. Eu não queria que o usuário visse o id porque normalmente você não liga qual id você é, você quer apenas usar o aplicativo ou o site. 
 
     $sql = "SELECT * FROM receitas WHERE id = :id"; //Essa parte significa "busque na tabela receitas onde o id é = :id" O id é o parâmetro
 
+    //Essas três linhas preparam a consulta, associam o ID recebido ao parâmetro :id e executam a busca:
     $stmt = $pdo->prepare($sql);
-
     $stmt->bindParam(":id", $id);
-
     $stmt->execute();
 
-    $receita = $stmt->fetch(PDO::FETCH_ASSOC); // fetch pega o resultado encontrado $receita tem a receita que foi encontrada
+    $receita = $stmt->fetch(PDO::FETCH_ASSOC); // Se encontrar a receita, $receita será um array associativo com seus dados. Se não encontrar nenhuma linha, o resultado será false
 
     if (!$receita) { // o if pergunta se foi encontrada alguma receita. Se não encontrou:
 
         $erro = "Receita não encontrada.";
 
-    }
+    }//Essa etapa recupera a receita selecionada para que o sistema possa confirmar qual registro será excluído antes de realizar a exclusão de fato.
 
 }
 
 /*Excuindo a receita:*/
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['excluir'])) { //Essa parte é uma condição  que verifica se a requisição é POST e se foi enviado um campo chamado excluir.
 
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['excluir'])) { //Essa parte pergunta algo como "O usuário confirmou que quer excluir?" se sim:
+    $id = $_POST['id'];// aqui recebe novamente o ID da receita selecionada, agora no formulário responsável por fazer a exclusão.
 
-    $id = $_POST['id'];
+    if (apagar($pdo, $id)) { // aqui ele chama a função apagar e dá parâmetros a ela: pdo que é a conexão com o banco e o id que é para apagar
 
-    if (apagar($pdo, $id)) { // aqui ele chama a função apagar e dá parâmetros a ela
-
-        header("Location: delete.php?apagada=1");
-        exit();
+        header("Location: delete.php?apagada=1"); // aqui o header solicita que o navegador abra novamente a página delete.php, desta vez com ?apagada=1 no endereço. O ? inicia uma parte da URL chamada query string, e apagada=1 é um parâmetro enviado pela URL. O sistema redireciona para a mesma página depois de excluir a receita porque ele mostra uma mensagem de sucesso.
+        exit();//aqui ele encerra o código
 
     }
-
 }
 
 /*Cancelando:*/
-
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['cancelar'])) { //Se o usuário clicar em cancelar mostra a mensagem:
 
-    $receitas = [];
-    $receita = null;
+    $receitas = []; //Limpa a lista de receitas que estava guardada na variável.
+    $receita = null; // Remove da variável a referência aos dados da receita que estava selecionada para confirmação.
+
+    //Isso serve para limpar os dados usados pelo PHP nessa execução, para que a página não continue tratando a receita anterior como selecionada.
 
 }
 
 /*Mensagem depois de apagar:*/
-
-if (isset($_GET['apagada'])) {
+if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. Ela contém os parâmetros recebidos pela URL. Quando o navegador é redirecionado para 'delete.php?apagada=1' o parâmetro apagada fica disponível em $_GET['apagada']. isset($_GET['apagada']) verifica se esse parâmetro existe e não é vazio. Se ele não for:
 
     $erro = "Receita apagada com sucesso.";
 
@@ -289,31 +285,19 @@ if (isset($_GET['apagada'])) {
 
                         <label for="nome">Digite o nome da receita:</label>
 
-                        <input
-                            type="search"
-                            name="nome"
-                            id="nome"
-                            placeholder="Digite o nome da receita"
-                            required
-                        >
-
+                        <input type="search" name="nome" id="nome" placeholder="Digite o nome da receita" required>
                     </div>
 
                     <div class="botoes">
 
-                        <input
-                            type="submit"
-                            name="pesquisar"
-                            value="Pesquisar"
-                        >
-
+                        <input type="submit" name="pesquisar" value="Pesquisar">
                     </div>
 
                 </div>
 
             </form>
 
-            <?php if ($erro != ''): ?>
+            <?php if ($erro != ''): ?> <!-- aqui verifica se a variável $erro é diferente de um texto vazio.-->
 
                 <p class="erro"><?php echo htmlspecialchars($erro); ?></p>
 
