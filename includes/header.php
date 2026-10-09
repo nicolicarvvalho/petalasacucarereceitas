@@ -1,6 +1,6 @@
 <?php
-// Define o caminho para voltar à raiz do projeto a partir de subpastas como app/ ou usuario/
-$raiz = "../";
+// Usa $base se já foi definida na página, caso contrário usa "../"
+$raiz = isset($base) ? $base : "../";
 ?>
 
 <style>
@@ -55,7 +55,7 @@ $raiz = "../";
 
 <header>
     <div class="logo">
-        <img src="<?php echo $raiz; ?>imagens/logos.png">
+        <img src="<?php echo $raiz; ?>imagens/logos.png" alt="Logo Pétalas, Açúcar e Receitas">
     </div>
 
     <div class="navegacao">

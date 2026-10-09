@@ -21,5 +21,5 @@
 </style>
 
 <footer class="rodape">
-    <img src="../imagens/logoFooter.png" alt="Logo Pétalas, Açúcar e Receitas" class="logofooter-img" ">
+    <img src="<?php echo isset($base) ? $base : '../'; ?>imagens/logofooter.png" alt="Logo Pétalas, Açúcar e Receitas" class="logofooter-img">
 </footer>

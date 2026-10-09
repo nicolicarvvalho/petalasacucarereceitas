@@ -4,6 +4,9 @@ require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
+// Pega o ID do usuário logado na sessão
+$usuario_id = $_SESSION['usuario_id'];
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,6 +19,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
     <link rel="icon" type="image/png" href="../imagens/logo32.png">
 
     <style>
+        /* Teus estilos mantêm-se iguais */
         .card-receita {
             width: 240px;
             padding: 20px;
@@ -56,9 +60,6 @@ require_once __DIR__ . '/../login/verificaUser.php';
         }
 
         .botao-receita:hover {
-            background-color: #d63765;
-            color: #fbf5e9 !important;
-            text-decoration: none !important;
             opacity: 0.8;
         }
 
@@ -87,21 +88,18 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
     <?php include __DIR__ . '/../includes/header.php'; ?>
 
-
     <main>
 
-        <h1>Receitas</h1>
+        <h1>Minhas Receitas</h1>
 
         <?php
-
-        verTodas($pdo);
-
+        // Passa o $pdo e o $usuario_id logado para listar apenas as dele
+        verTodas($pdo, $usuario_id);
         ?>
 
     </main>
 
-
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 

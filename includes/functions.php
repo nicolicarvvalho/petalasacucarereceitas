@@ -59,56 +59,53 @@ function cadastrar($pdo, $usuario_id, $categoria, $nome, $ingredientes, $modo_pr
 
 //falta ver se está funcionando:
 
-function verTodas($pdo, $nome = '') {
+function verTodas($pdo, $usuario_id, $nome = '') {
 
     if ($nome != '') {
-
-        $sql = "SELECT * FROM receitas WHERE nome ILIKE :nome ORDER BY nome";
-
+        // Busca apenas as receitas do usuário logado que batem com o nome pesquisado
+        $sql = "SELECT * FROM receitas WHERE usuario_id = :usuario_id AND nome ILIKE :nome ORDER BY nome";
     } else {
-
-        $sql = "SELECT * FROM receitas ORDER BY nome";
-
+        // Busca TODAS as receitas pertencentes APENAS ao usuário logado
+        $sql = "SELECT * FROM receitas WHERE usuario_id = :usuario_id ORDER BY nome";
     }
 
     try {
 
         $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":usuario_id", $usuario_id);
 
         if ($nome != '') {
-
-            $nome = "%" . $nome . "%";
-
-            $stmt->bindParam(":nome", $nome);
-
+            $nome_busca = "%" . $nome . "%";
+            $stmt->bindParam(":nome", $nome_busca);
         }
 
         $stmt->execute();
 
         $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        if (empty($receitas)) {
+            echo "<p style='color: #d63765;'>Você ainda não cadastrou nenhuma receita.</p>";
+            return;
+        }
+
         foreach ($receitas as $receita) {
 
             echo "<div class='card-receita'>";
 
             if (!empty($receita['imagem'])) {
-
                 echo "<img src='../imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem da receita'>";
-
+            } else {
+                echo "<img src='../imagens/placeholder.png' alt='Sem imagem'>";
             }
 
             echo "<h2>" . htmlspecialchars($receita['nome']) . "</h2>";
 
             echo "<p><strong>Categoria:</strong> "
-
                 . htmlspecialchars($receita['categoria'])
-
                 . "</p>";
 
             echo "<p><strong>Dificuldade:</strong> "
-
                 . htmlspecialchars($receita['diiculdade'])
-
                 . "</p>";
 
             echo "<a href='receita.php?id=" . $receita['id'] . "' class='botao-receita'>Ver receita</a>";

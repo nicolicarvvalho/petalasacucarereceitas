@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
@@ -19,9 +20,12 @@ if (isset($_POST['excluir_perfil'])) {
     }
 }
 
-$foto = '../imagens/' . $usuario['fotoperfil'];
+// Pega apenas o nome do ficheiro da foto (evita duplicar 'perfil/' se já existir no banco)
+$nome_foto = !empty($usuario['fotoperfil']) ? basename($usuario['fotoperfil']) : 'padrao.png';
+
 $base = '../';
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -34,108 +38,65 @@ $base = '../';
 
     <style>
         * {
-
             box-sizing: border-box;
-
         }
 
         body {
-
             margin: 0;
-
             padding: 0;
-
-            background-color: #fbf5e9;;
-
+            background-color: #fbf5e9;
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             color: #5f4b4b;
-
         }
 
         .perfil {
-
             max-width: 1000px;
-
             margin: 55px auto;
-
             padding: 0 50px 60px;
-
             text-align: center;
-
         }
 
         .perfil h1 {
-
             color: #d63765;
-
             font-size: 2.1rem;
-
             margin-bottom: 35px;
-
         }
 
         .foto-perfil {
-
-        border-radius: 50%;
+            border-radius: 50%;
             width: 200px;
-
             height: 200px;
-
             object-fit: cover;
-
             display: block;
-
             margin: 0 auto 25px;
-
         }
 
         .email {
-
             color: #5f4b4b;
-
             font-size: 1.1rem;
-
             margin-bottom: 30px;
-
         }
 
         .botoes {
-
             display: flex;
-
             justify-content: center;
-
             gap: 15px;
-
         }
 
         .botao {
-
             display: inline-block;
-
             background-color: #d63765;
-
             color: #fbf5e9;
-
             padding: 10px 20px;
-
             text-decoration: none;
-
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             font-weight: bold;
-
             border: none;
-
             cursor: pointer;
-
         }
 
         .botao:hover {
-
             opacity: 0.8;
-
         }
     </style>
 
@@ -150,10 +111,11 @@ $base = '../';
 
         <h1>Meu Perfil</h1>
 
-        <img src="<?php echo '../imagens/' . $usuario['fotoperfil']; ?>" alt="Foto de perfil" class="foto-perfil">
+        <!-- Aponta diretamente para a pasta imagens/perfil/ no servidor -->
+        <img src="../imagens/perfil/<?php echo $nome_foto; ?>" alt="Foto de perfil" class="foto-perfil">
 
         <p class="email">
-            E-mail: <?php echo $usuario['email']; ?>
+            E-mail: <?php echo htmlspecialchars($usuario['email'] ?? ''); ?>
         </p>
 
         <div class="botoes">
