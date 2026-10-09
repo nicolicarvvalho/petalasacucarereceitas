@@ -150,7 +150,7 @@ $base = '../';
 
         <h1>Meu Perfil</h1>
 
-        <<img src="<?php echo '../imagens/' . $usuario['fotoperfil']; ?>" alt="Foto de perfil" class="foto-perfil">
+        <img src="<?php echo '../imagens/' . $usuario['fotoperfil']; ?>" alt="Foto de perfil" class="foto-perfil">
 
         <p class="email">
             E-mail: <?php echo $usuario['email']; ?>

@@ -1,9 +1,16 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../database/conexao.php';
+require_once __DIR__ . '/../includes/functions.php';
 
-session_start();
+// Se o utilizador já estiver logado, envia direto para a página inicial
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: ../app/inicio.php");
+    exit();
+}
 
 $erro = '';
 

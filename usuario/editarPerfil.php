@@ -1,7 +1,9 @@
 <?php
 
+require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
+
 
 $usuario_id = $_SESSION['usuario_id'];
 
@@ -25,18 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 
     if ($foto_upload && $foto_upload['error'] == 0) {
+    $pasta_perfil = __DIR__ . '/../imagens/perfil/';
+    
+    // Cria a pasta caso não exista
+    if (!is_dir($pasta_perfil)) {
+        mkdir($pasta_perfil, 0777, true);
+    }
 
-        $nome_original = $foto_upload['name'];
-        $extensao = pathinfo($nome_original, PATHINFO_EXTENSION);
-        $novo_nome = 'usuario_' . $usuario_id . '.' . $extensao;
-        $caminho = __DIR__ . '/../imagens/perfil/' . $novo_nome;
-        move_uploaded_file($foto_upload['tmp_name'], $caminho);
+    $nome_original = $foto_upload['name'];
+    $extensao = pathinfo($nome_original, PATHINFO_EXTENSION);
+    $novo_nome = 'usuario_' . $usuario_id . '.' . $extensao;
+    $caminho = $pasta_perfil . $novo_nome;
+
+    if (move_uploaded_file($foto_upload['tmp_name'], $caminho)) {
         $caminho_banco = 'perfil/' . $novo_nome;
         atualizaFoto($pdo, $usuario_id, $caminho_banco);
     }
-
-    header("Location: perfil.php");
-    exit();
+}
 }
 $base = '../';
 ?>
@@ -248,7 +255,9 @@ $base = '../';
 
 <body>
 
-    <?php include '../includes/header.php'; ?>
+<?php include __DIR__ . '/../includes/header.php'; ?>
+
+
 
     <main class="principal">
 
@@ -395,8 +404,7 @@ $base = '../';
 
     </main>
 
-    <?php include '../includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 
 </html>

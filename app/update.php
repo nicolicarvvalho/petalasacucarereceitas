@@ -1,6 +1,6 @@
 <?php
-require_once '../database/conexao.php';
-require_once '../includes/functions.php';
+require_once __DIR__ . '/../database/conexao.php';
+require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
 $receita = null;
@@ -48,15 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
 
         if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
             $nomeImagem = basename($_FILES['imagem']['name']);
-            $pasta = '../imagens/';
+            $pasta = __DIR__ . '/../imagens/receitas/';
             $caminhoImagem = $pasta . $nomeImagem;
 
-            move_uploaded_file(
-                $_FILES['imagem']['tmp_name'],
-                $caminhoImagem
-            );
-
-            $imagem = 'imagens/' . $nomeImagem;
+            move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem);
+            $imagem = $nomeImagem;
         }
 
         try {
@@ -376,7 +372,7 @@ if ($receita && !empty($receita['tempo_preparo'])) {
 
 <body>
 
-    <?php include '../includes/header.php'; ?>
+    <?php include __DIR__ . '/../includes/header.php'; ?>
 
     <main class="principal">
 
@@ -491,7 +487,9 @@ if ($receita && !empty($receita['tempo_preparo'])) {
 
     </main>
 
-    <?php include '../includes/footer.php' ?>
+
+
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 

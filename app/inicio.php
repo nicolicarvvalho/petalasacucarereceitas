@@ -181,7 +181,7 @@ for ($i = 0; $i < $total; $i++) {
     <!-- Conta do usuário -->
     <div class="conta">
         <a href="../usuario/perfil.php">
-            <img src="../imagens/<?php echo $usuario['fotoperfil']; ?>" alt="Foto de perfil">
+            <img src="../imagens/<?php echo basename($usuario['fotoperfil']); ?>" alt="Foto de perfil">
             <p>Meu perfil</p>
         </a>
     </div>

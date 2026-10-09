@@ -1,7 +1,9 @@
 <?php
-session_start(); // Inicia a sessão para permitir o login automático
+session_start();
 
+require_once __DIR__ . '/../database/conexao.php'; // 
 require_once __DIR__ . '/../includes/functions.php';
+
 $erro = '';
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {

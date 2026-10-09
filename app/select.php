@@ -1,5 +1,6 @@
 <?php
-require_once '../database/conexao.php';
+
+require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
@@ -86,6 +87,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
     <?php include __DIR__ . '/../includes/header.php'; ?>
 
+
     <main>
 
         <h1>Receitas</h1>
@@ -98,7 +100,8 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
     </main>
 
-    <?php include __DIR__ . '/../includes/footer.php'; ?>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>
 
 </body>
 

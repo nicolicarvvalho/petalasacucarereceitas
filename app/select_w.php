@@ -1,8 +1,7 @@
 <?php 
 
-require_once '../database/conexao.php';
-
-require '../includes/functions.php'; 
+require_once __DIR__ . '/../database/conexao.php';
+require_once __DIR__ . '/../includes/functions.php';
 
 require_once __DIR__ . '/../login/verificaUser.php';
 
@@ -238,7 +237,8 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
 <body>
 
-    <?php include '../includes/header.php'; ?> <!-- Incluindo o header -->
+    <?php include __DIR__ . '/../includes/header.php'; ?>
+ <!-- Incluindo o header -->
 
     <main>
 
@@ -280,8 +280,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
     </main>
 
-    <?php include '../includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>
 </body>
 
 </html>

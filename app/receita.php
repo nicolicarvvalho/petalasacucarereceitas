@@ -21,7 +21,6 @@ if ($id != '') {
     $stmt->execute();
 
     $receita = $stmt->fetch(PDO::FETCH_ASSOC);
-
 }
 
 ?>
@@ -39,7 +38,6 @@ if ($id != '') {
     <link rel="icon" type="image/png" href="../imagens/logo32.png">
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -146,7 +144,6 @@ if ($id != '') {
                 width: 100%;
             }
         }
-
     </style>
 
 </head>
@@ -165,12 +162,13 @@ if ($id != '') {
 
                 <!-- Quadro da Imagem (Lado Esquerdo) -->
                 <div class="quadro-imagem">
-                    <?php 
+                    <?php
                     $caminho_imagem = "../imagens/receitas/" . $receita['imagem'];
-                    if (!empty($receita['imagem']) && file_exists(__DIR__ . '/' . $caminho_imagem)): 
+                    $caminho_disco  = __DIR__ . '/../imagens/receitas/' . $receita['imagem'];
+
+                    if (!empty($receita['imagem']) && file_exists($caminho_disco)):
                     ?>
-                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" 
-                             alt="<?php echo htmlspecialchars($receita['nome']); ?>">
+                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" alt="<?php echo htmlspecialchars($receita['nome']); ?>">
                     <?php endif; ?>
                 </div>
 

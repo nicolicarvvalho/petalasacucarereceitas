@@ -11,10 +11,13 @@
 
     <style>
         /* Deinxando sem bordas: */
-        * { /* O asterisco pega tudo que é html do arquivo */
-            margin: 0; /* Esse e o debaixo remove os espaçamentos externos e internos que o navegador coloca por padrão (*/
+        * {
+            /* O asterisco pega tudo que é html do arquivo */
+            margin: 0;
+            /* Esse e o debaixo remove os espaçamentos externos e internos que o navegador coloca por padrão (*/
             padding: 0;
-            box-sizing: border-box; /* Esse garante que  padding e border fiquem incluídas na largura e altura total do elemento, evitando que caixas destorcer ao adicionar espaçamentos. */
+            box-sizing: border-box;
+            /* Esse garante que  padding e border fiquem incluídas na largura e altura total do elemento, evitando que caixas destorcer ao adicionar espaçamentos. */
         }
 
         /* Deixando o fundo da mesma cor da imagem porque ela não tem tamanho suficiente para ficar na tela inteira: */
@@ -22,7 +25,8 @@
         body {
             margin: 0;
             padding: 0;
-            width: 100%;/* Ess e debaixo deixam toda a tela do navegador na cor abaixo*/
+            width: 100%;
+            /* Ess e debaixo deixam toda a tela do navegador na cor abaixo*/
             height: 100%;
             background-color: #F7EFE1;
             /* Cor creme/bege do fundo da imagem */
@@ -30,7 +34,7 @@
 
         .principal {
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             min-height: 100vh;
         }
 
@@ -57,9 +61,12 @@
 
         .login {
             display: flex;
-            justify-content: center; /* Centraliza os botões no meio da tela */
-            gap: 30px;               /* Controla a distância entre os dois lados (diminua o número para aproximar mais) */
-            align-items: flex-end;   /* Alinha a base dos botões */
+            justify-content: center;
+            /* Centraliza os botões no meio da tela */
+            gap: 30px;
+            /* Controla a distância entre os dois lados (diminua o número para aproximar mais) */
+            align-items: flex-end;
+            /* Alinha a base dos botões */
             padding: 25px 40px;
             background-color: #d63765;
             width: 100%;
@@ -84,14 +91,16 @@
             display: inline-block;
             background-color: #F7EFE1;
             color: #d63765;
-            border: 2px solid;            
-            text-decoration: none; /* Tira o sublinhado azul do link */
+            border: 2px solid;
+            text-decoration: none;
+            /* Tira o sublinhado azul do link */
             font-weight: bold;
             font-family: sans-serif;
             cursor: pointer;
             font-size: 0.95rem;
             transition: background-color 0.2s, color 0.2s;
-            text-decoration: none; /* Tira o sublinhado do link */
+            text-decoration: none;
+            /* Tira o sublinhado do link */
 
         }
 
@@ -104,8 +113,9 @@
             display: inline-block;
             background-color: transparent;
             border: 2px solid #F7EFE1;
-            text-decoration: none; /* Tira o sublinhado azul do link */
-            color: #F7EFE1;             
+            text-decoration: none;
+            /* Tira o sublinhado azul do link */
+            color: #F7EFE1;
             font-weight: bold;
             font-family: sans-serif;
             cursor: pointer;
@@ -117,14 +127,6 @@
             background-color: #F7EFE1;
             color: #d63765;
         }
-
-
-
-
-
-
-
-        
     </style>
 
 </head>
@@ -141,12 +143,11 @@
         <div class="login">
             <div class="cadastrar">
                 <label for="cadastre-se">Ainda não tem uma conta?</label>
-                <a href="/login/cadastrar.php" class="botaoc">Cadastre-se</a>
-            </div><!-- essa fecha a div cadastrar -->
-
+                <a href="login/cadastrar.php" class="botaoc">Cadastre-se</a>
+            </div>
             <div class="entrar">
-                <a href="/login/entrar.php" class="botaoe">Entrar</a>
-            </div><!-- essa fecha a div entrar -->
+                <a href="login/entrar.php" class="botaoe">Entrar</a>
+            </div>
         </div> <!-- essa fecha a div login -->
 
     </main>
