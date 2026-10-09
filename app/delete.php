@@ -303,7 +303,8 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
             <?php endif; ?>
 
-        <?php elseif (!empty($receitas)): ?>
+            <!-- Verificando se existem receitas encontradas. se a condição anterior for falsa e $receitas contiver resultados, o PHP entra nesse bloco e executa o código que apresenta as receitas encontradas.--
+        <?php elseif (!empty($receitas)): ?> <!- verifica se a variavel receitas está vazia -->
 
             <h1>Apagar Receita</h1>
 
@@ -311,35 +312,37 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
             <p>Escolha qual receita você deseja apagar:</p>
 
-            <?php foreach ($receitas as $receitaEncontrada): ?>
+
+        <!-- Esse aqui percorre listas -->
+            <?php foreach ($receitas as $receitaEncontrada): ?> <!-- a variavel $receitas é o array que contém as receitas encontradas na pesquisa.  'as' define a variável que receberá cada elemento durante a repetição que nesse caso é a variável receitaEncontrada. Supondo que a variavel receitas tenha encontrado 3 receitas o foreach é executado 3 vezes, uma vez par cada receita encontrada. -->
 
                 <article>
 
-                    <h3><?php echo htmlspecialchars($receitaEncontrada['nome']); ?></h3>
+                    <h3><?php echo htmlspecialchars($receitaEncontrada['nome']); ?></h3><!-- $receitaEncontrada é o array associativo da receita atual. o ['nome'] é o nome que está no form, e o htmlspecialchars() protege a saída, impedindo que caracteres especiais sejam interpretados como HTML. O echo serve para falar tudo isso. -->
 
                     <p><strong>Categoria:</strong>
-                        <?php echo htmlspecialchars($receitaEncontrada['categoria']); ?>
+                        <?php echo htmlspecialchars($receitaEncontrada['categoria']); ?> <!--O mesmo vale para esse -->
                     </p>
 
-                    <?php if (!empty($receitaEncontrada['tempo_preparo'])): ?>
+                    <?php if (!empty($receitaEncontrada['tempo_preparo'])): ?> <!-- Se o tempo de preparo não estiver vazio, execute:-->
 
                         <p><strong>Tempo de preparo:</strong>
                             <?php echo htmlspecialchars($receitaEncontrada['tempo_preparo']); ?>
-                        </p>
+                        </p><!--Exibe o tempo de preparo -->
 
-                    <?php endif; ?>
+                    <?php endif; ?> <!-- Esse encerra o if do tempo de preparo -->
 
-                    <?php if (!empty($receitaEncontrada['diiculdade'])): ?>
+                    <?php if (!empty($receitaEncontrada['diiculdade'])): ?><!-- Esse é praticamente a mesma coisa, se a dificuldade não for vazia, execute: -->
 
                         <p><strong>Dificuldade:</strong>
                             <?php echo htmlspecialchars($receitaEncontrada['diiculdade']); ?>
-                        </p>
+                        </p><!-- Exibe a dificuldade -->
 
-                    <?php endif; ?>
+                    <?php endif; ?><!-- encerra o if da dificuldade-->
 
                     <form action="delete.php" method="POST">
 
-                        <input type="hidden" name="id" value="<?php echo $receitaEncontrada['id']; ?>">
+                        <input type="hidden" name="id" value="<?php echo $receitaEncontrada['id']; ?>"> <!--$receitaEncontrada é a variável que guarda os dados da receita atual dentro do foreach. ['id'] acessa o valor da coluna id dessa receita. -->
 
                         <input type="submit" name="confirmar" value="Excluir esta receita">
 
