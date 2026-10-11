@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) { //O us
     $sql = "SELECT id, nome, categoria, tempo_preparo, diiculdade, imagem
             FROM receitas
             WHERE nome ILIKE :nome
-            ORDER BY nome"; //ILIKE É uma comparação de texto do PostgreSQL que não diferencia maiúsculas de minúsculas.
+            ORDER BY nome"; //ILIKE É uma comparação de texto do postgres que não diferencia maiúsculas de minúsculas.
 
     $stmt = $pdo->prepare($sql); //prepara a consulta: liga o nome ao valor (tipo "bolo" para "%bolo%"). O prepare() prepara a consulta SQL para receber os valores dos parâmetros. O $stmt guarda o objeto que representa essa consulta preparada.
 
@@ -273,7 +273,9 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
     <main class="principal">
 
-        <?php if ($receita == null && empty($receitas)): ?>
+        <?php 
+        if ($receita == null && empty($receitas)): //aqui está verficando se a receita individual está vazia (null) e se a lista de receitas $receitas também está vazia. Se essa condição for verdadeira, acontece isso:
+        ?>
 
             <h1>Apagar Receita</h1>
 
@@ -354,7 +356,7 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
             <?php endforeach; ?>
 
-        <?php elseif ($receita != null): ?>
+        <?php elseif ($receita != null): ?> <!--: Se a primeira condição não for atendida, ele testa se $receita possui alguma informação. Se sim, ele mosta o formulário de confirmação de exclusão.-->
 
             <h1>Apagar Receita</h1>
 
@@ -364,7 +366,7 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
                 <p>Você tem certeza que deseja apagar esta receita?</p>
 
-                <h3><?php echo htmlspecialchars($receita['nome']); ?></h3>
+                <h3><?php echo htmlspecialchars($receita['nome']); ?></h3> <!-- Isso de caractere especial é para caso o usuário tenha digitado algo 'diferente', o html não interprete como código. -->
 
                 <p><strong>Categoria:</strong>
                     <?php echo htmlspecialchars($receita['categoria']); ?>
@@ -374,7 +376,7 @@ if (isset($_GET['apagada'])) {// $_GET é outra variável superglobal do PHP. El
 
                     <form action="delete.php" method="POST">
 
-                        <input type="hidden" name="id" value="<?php echo $receita['id']; ?>">
+                        <input type="hidden" name="id" value="<?php echo $receita['id']; ?>"> <!-- Insere o ID da receita no campo oculto do formulário. Quando o usuário clica em "Sim, apagar receita", o PHP envia esse ID por  requisição POST para esse arquivo saber exatamente qual registro excluir no banco de dados. -->
 
                         <input type="submit" name="excluir" value="Sim, apagar receita">
 

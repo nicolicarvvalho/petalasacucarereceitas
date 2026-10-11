@@ -6,19 +6,18 @@ require_once __DIR__ . '/../includes/functions.php';
 
 require_once __DIR__ . '/../login/verificaUser.php';
 
-$id = $_GET['id'] ?? '';
+$id = $_GET['id'] ?? '';//aqui estou pegando o id que foi enviado por meio do metodo GET e se exsitir um id estou guardando na vriável senão deixando vazio
 
-$receita = null;
+$receita = null;//por enquanto a variavel receita está vazia
 
-if ($id != '') {
+if ($id != '') {//se o id for diferente de vazio, execute:
 
+  //ali em cima o usuario tinha um id, usando de exemplo o id = 5, o php vai executar uma busca na base de dados para encontrar a receita do ID 5. Caso a condiçõo for falsa ele pula esse bloco
     $sql = "SELECT * FROM receitas WHERE id = :id";
+    $stmt = $pdo->prepare($sql);//aqui, ele envia o comando $sql para a base de dados preparar a consulta, mas sem executá-la ainda. O objeto de conexão que é o $pdo envia a variavel $sql para o servidor do banco de dados .
+    $stmt->bindParam(":id", $id);//O bindParam() limpa o valor da variável $id automaticamente. Se um hacker tentar colocar comandos maliciosos na URL ele não permite
 
-    $stmt = $pdo->prepare($sql);
-
-    $stmt->bindParam(":id", $id);
-
-    $stmt->execute();
+    $stmt->execute();//O PHP envia para o postgres o valor contido na variável $id vinculada no passo anterior.
 
     $receita = $stmt->fetch(PDO::FETCH_ASSOC);
 }
