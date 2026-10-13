@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //SERVER é uma variável super glob
     $diiculdade = $_POST['opcao'] ?? '';
 
     // Junta o número com a unidade
-
     $tempo_preparo = $tempo . ' ' . $unidade; //$tempo_preparo é a variável que armazena o tempo completo de preparo da receita. $tempo é a variável que recebeu o número digitado pelo usuário. Ela está concatenando com uma string vazia e a variável $unidade. Ao final se o usuário tiver digitado o número 20 e escolhido a unidade minutos por exemplo, o php vai armazenar na variável tempo_preparo 20 minutos.
 
     // Por enquanto, deixa a imagem vazia
