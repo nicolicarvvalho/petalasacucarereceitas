@@ -1,30 +1,32 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../database/conexao.php'; // 
+require_once __DIR__ . '/../database/conexao.php'; 
 require_once __DIR__ . '/../includes/functions.php';
 
-$erro = '';
+$erro = '';//variável começa vazia
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $email = $_POST['email'] ?? '';
-    $senha = $_POST['senha'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] == "POST") { //se o usuario que está logado faz uma requisição do tipo post, execute: 
+    $email = $_POST['email'] ?? '';//guarda na variável email o resultado do ternário: se o email que tiver sido inserido através do método post, senão deixa vazia
+    $senha = $_POST['senha'] ?? '';//aqui a mesma coisa porem com senha
     
-    try {
-        if (cadastraUser($pdo, $email, $senha)) {
-            // Busca o usuário recém-criado para obter o ID e logar automaticamente
-            $usuario = consulta_user($pdo, $email);
+    try {//tente:
+        if (cadastraUser($pdo, $email, $senha)) {//se a função cadastraUser dar certo:
+            $usuario = consulta_user($pdo, $email);//guarda na variavel usuario o resultado da função consulta_user
             
-            if ($usuario) {
-                $_SESSION['usuario_id'] = $usuario['id'];
+            if ($usuario) { //se a variável usuario existe
+                $_SESSION['usuario_id'] = $usuario['id'];//aqui acontece o login. o php guarda o ID desse novo usuário na sessão. A partir daqui o sistema reconhece que ele está  logado.
+
                 
-                // Redireciona para a página inicial (caminho correto)
+                // Redireciona para a página inicial 
                 header("Location: ../app/inicio.php");
-                exit();
+                exit();//aqui encerra o código
             }
-        } else {
-            $erro = "Não foi possível criar a conta.";
+        } else {//se a função der errado:
+            $erro = "Não foi possível criar a conta.";//guarda na variavel erro essa frase
         }
+
+        //tratamento de erros:
     } catch (PDOException $e) {
         $erro = "Não foi possível criar a conta. Tente novamente.";
     }
@@ -240,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <input type="reset" value="Limpar" class="botaol">
             </form>
 
-            <?php if (!empty($erro)): ?>
+            <?php if (!empty($erro)): ?> <!-- se o erro for diferente de vazio, execute -->
                 <p style="color: #F7EFE1; margin-top: 15px; text-align: center; font-family: sans-serif; font-size: 0.9rem;">
                     <?php echo $erro; ?>
                 </p>

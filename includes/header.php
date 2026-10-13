@@ -1,6 +1,7 @@
 <?php
-// Usa $base se já foi definida na página, caso contrário usa "../"
-$raiz = isset($base) ? $base : "../";
+
+$raiz = isset($base) ? $base : "../";// Usa $base se já foi definida na página, senão usa "../"
+
 ?>
 
 <style>
@@ -55,7 +56,7 @@ $raiz = isset($base) ? $base : "../";
 
 <header>
     <div class="logo">
-        <img src="<?php echo $raiz; ?>imagens/logos.png" alt="Logo Pétalas, Açúcar e Receitas">
+        <img src="<?php echo $raiz; ?>imagens/logos.png" alt="Logo Pétalas, Açúcar e Receitas"><!-- pega a imagem que está na pasta imagens com auxilio da variável raiz que foi definida lá em cima -->
     </div>
 
     <div class="navegacao">

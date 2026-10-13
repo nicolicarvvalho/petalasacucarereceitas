@@ -21,5 +21,5 @@
 </style>
 
 <footer class="rodape">
-    <img src="<?php echo isset($base) ? $base : '../'; ?>imagens/logofooter.png" alt="Logo Pétalas, Açúcar e Receitas" class="logofooter-img">
+    <img src="<?php echo isset($base) ? $base : '../'; ?>imagens/logofooter.png" alt="Logo Pétalas, Açúcar e Receitas" class="logofooter-img"> <!-- aqui estou falando que se a variavel base existir use ela, senão use ../ para ir até a logo que está no caminho acima
 </footer>

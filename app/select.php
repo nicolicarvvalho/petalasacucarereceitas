@@ -4,7 +4,7 @@ require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
-// Pega o ID do usuário logado na sessão
+// Pega o ID do usuário logado na sessão e guarda na variável usuario_id
 $usuario_id = $_SESSION['usuario_id'];
 
 ?>

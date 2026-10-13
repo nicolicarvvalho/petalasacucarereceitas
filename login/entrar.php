@@ -1,37 +1,35 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE) { //se a sessão ainda não tiver sido iniciada:
     session_start();
 }
 
 require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 
-// Se o utilizador já estiver logado, envia direto para a página inicial
-if (isset($_SESSION['usuario_id'])) {
-    header("Location: ../app/inicio.php");
-    exit();
+// Se o usuario já estiver logado, envia direto para a página inicial
+if (isset($_SESSION['usuario_id'])) {  //se a sessão do id do usuario está definida:
+    header("Location: ../app/inicio.php");//leve ele para a página inicio.php
+    exit();//encerra o código
 }
 
-$erro = '';
+$erro = '';//variável erro por enquanto está vazia
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+if ($_SERVER['REQUEST_METHOD'] == "POST") {//se o usuario fez uma requisição do tipo post:
 
-    $email = $_POST['email'] ?? '';
-    $senha = $_POST['senha'] ?? '';
+    $email = $_POST['email'] ?? '';//a variavel email guarda o resultado do ternário: se o formulário com o nome de email do tipo post tiver sido enviada, guarde nela senão deixe vazia
+    $senha = $_POST['senha'] ?? '';//aqui a mesma coisa
 
-    $usuario = consulta_user($pdo, $email);
+    $usuario = consulta_user($pdo, $email);//guarda na variavel usuario o resultado da função consulta_user
 
-    if ($usuario && $usuario['senha'] === $senha) {
+    if ($usuario && $usuario['senha'] === $senha) {//se a variável usuario tiver alguma coisa e a senha que o usuario digitou for a mesma que ele cadastrou :
 
-        $_SESSION['usuario_id'] = $usuario['id'];
-        header("Location: ../app/inicio.php");
-        exit();
-    } else {
-
+        $_SESSION['usuario_id'] = $usuario['id'];//inicie uma sessão com o id do usuario e guarda o id na variável usuario
+        header("Location: ../app/inicio.php");//leve ele até a tela de inicio
+        exit();//encerre o código
+    } else { //senão, se a variável  usuario não tiver nada, exiba:
         $erro = "E-mail ou senha inválidos.";
     }
 }
-
 ?>
 
 <!DOCTYPE html>

@@ -5,47 +5,50 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = $_SESSION['usuario_id'];//guarda na variável usuario_id a sessão do usuario
 
-$usuario = consulta_id($pdo, $usuario_id);
+$usuario = consulta_id($pdo, $usuario_id); //guarda na variavel usuario o resultado da função consulta_id
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+if ($_SERVER['REQUEST_METHOD'] == "POST") {//se o usuario tiver feito uma requisição do tipo post:
 
-    $email = $_POST['email'] ?? '';
-    $senha = $_POST['senha'] ?? '';
-    $fotoperfil = $_POST['fotoperfil'] ?? '';
-    $foto_upload = $_FILES['foto_upload'] ?? null;
+    $email = $_POST['email'] ?? '';//guarda o resultado do ternário: se o usuario tiver feitouma requisição no campo email do tipo post guarda nela senão deixa vazia
+    $senha = $_POST['senha'] ?? '';//mesma coisa
+    $fotoperfil = $_POST['fotoperfil'] ?? '';//mesma coisa
+    $foto_upload = $_FILES['foto_upload'] ?? null;//mesma coisa, porem com null pois a super golbal FILES não guarda strings por isso não usa ' '
 
-    atualizaEmail($pdo, $usuario_id, $email);
+    atualizaEmail($pdo, $usuario_id, $email);//chama a função atualizaEmail
 
-    if (!empty($senha)) {
-        atualizaSenha($pdo, $usuario_id, $senha);
+    if (!empty($senha)) { //se a senha for diferente de vazia
+        atualizaSenha($pdo, $usuario_id, $senha); //chama a função atualizaSenha
     }
 
-    if (!empty($fotoperfil)) {
-        atualizaFoto($pdo, $usuario_id, $fotoperfil);
+    if (!empty($fotoperfil)) {//se a foto de perfil for diferente de vazia
+        atualizaFoto($pdo, $usuario_id, $fotoperfil); //chama a função que atualiza a foto
     }
 
-    if ($foto_upload && $foto_upload['error'] == 0) {
-    $pasta_perfil = __DIR__ . '/../imagens/perfil/';
+    if ($foto_upload && $foto_upload['error'] == 0) { //se a variável que guarda a foto existir e não tiver dado erro :
+    $pasta_perfil = __DIR__ . '/../imagens/perfil/'; //gurda na variável pasta_perfil que tem o caminho para a imagem ficar
     
     // Cria a pasta caso não exista
-    if (!is_dir($pasta_perfil)) {
-        mkdir($pasta_perfil, 0777, true);
+    if (!is_dir($pasta_perfil)) { //se o diretorio pasta perfil não existir:
+        mkdir($pasta_perfil, 0777, true); //cria a pasta e dá permissões a ela. o 077 fala que qualquer parte do site ou o próprio sistema pode ler, escrever (salvar arquivos) e deletar coisas dentro desta pasta. o true cria alguma pasta que estiver faltando, por exemplo se a pasta imagens não existir ele pode criar para que o código não quebre
     }
 
-    $nome_original = $foto_upload['name'];
-    $extensao = pathinfo($nome_original, PATHINFO_EXTENSION);
-    $novo_nome = 'usuario_' . $usuario_id . '.' . $extensao;
-    $caminho = $pasta_perfil . $novo_nome;
+    $nome_original = $foto_upload['name'];//guarda na variavel nome_original o nome da foto que o usuario fez upload
+    $extensao = pathinfo($nome_original, PATHINFO_EXTENSION);//na variavel extensão fica guardada a extensão da imagem que o usuario enviou. Na linha de cima com o nome da foto dava para descobrir a extensão da imagem, aqui dá para guardar somente a extensão. 
+    //A função pathinfo varre o texto, acha o ponto e isola o final. 
+    //PATHINFO_EXTENSION é tipo um filtro, é com ele que é possível pegar somente a extensão.
+    $novo_nome = 'usuario_' . $usuario_id . '.' . $extensao; //nessa variavel fica guardada o novo do nome da foto. Exemplo: usuario_8.png
+    $caminho = $pasta_perfil . $novo_nome; //nessa variável fica guardada a pasta onde fica as fotos com o novo nome da foto
 
-    if (move_uploaded_file($foto_upload['tmp_name'], $caminho)) {
-        $caminho_banco = 'perfil/' . $novo_nome;
-        atualizaFoto($pdo, $usuario_id, $caminho_banco);
+    if (move_uploaded_file($foto_upload['tmp_name'], $caminho)) { //quando o arquivo é enviado pelo usuario ele fica em uma pasta temporária. Por iso tem que mover esse arquivo para a pasta caminho
+        $caminho_banco = 'perfil/' . $novo_nome; //nessa variável ica guardada o nome que vai ser salvo. Exemplo: perfil/usuario_8.png
+        atualizaFoto($pdo, $usuario_id, $caminho_banco);//chama a função atualizaFoto
     }
 }
 }
-$base = '../';
+
+$base = '../'; //essa variável fica guardando uma parte do caminho. Tive que criar ela porque os meus includes estavam dando conflito
 ?>
 
 <!DOCTYPE html>

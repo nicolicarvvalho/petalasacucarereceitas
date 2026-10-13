@@ -24,211 +24,125 @@ require_once __DIR__ . '/../login/verificaUser.php';
     <style>
 
         * {
-
             box-sizing: border-box;
-
         }
 
         body {
-
             margin: 0;
-
             padding: 0;
-
             background-color: #fbf5e9;
-
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             color: #d63765;
-
         }
 
         main {
-
             max-width: 1000px;
-
             margin: 55px auto;
-
             padding: 0 50px 60px;
-
         }
 
         h1 {
-
             font-size: 2.1rem;
-
             font-weight: bold;
-
             margin: 0 0 35px;
-
             color: #d63765;
-
         }
 
         .pesquisa {
-
             display: flex;
-
             gap: 15px;
-
             margin-bottom: 40px;
-
         }
 
         .pesquisa input[type="search"] {
-
             width: 500px;
-
             height: 42px;
-
             border: none;
-
             background-color: #f0e5d2;
-
             padding: 12px;
-
             color: #5f4b4b;
-
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             font-size: 1rem;
-
             outline: none;
-
         }
 
         .pesquisa input[type="search"]:focus {
-
             outline: 2px solid #d63765;
-
         }
 
         .pesquisa input[type="submit"] {
-
             height: 42px;
-
             padding: 8px 25px;
-
             border: 2px solid #d63765;
-
             background-color: #d63765;
-
             color: #fbf5e9;
-
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             font-size: 1rem;
-
             font-weight: bold;
-
             cursor: pointer;
-
         }
 
         .pesquisa input[type="submit"]:hover {
-
             opacity: 0.8;
-
         }
 
         .card-receita {
-
             width: 240px;
-
             padding: 20px;
-
             background-color: #f0e5d2;
-
             margin: 15px;
-
             display: inline-block;
-
             vertical-align: top;
-
         }
 
         .card-receita img {
-
             width: 100%;
-
             height: 150px;
-
             object-fit: cover;
-
             display: block;
-
             margin-bottom: 15px;
-
         }
 
         .card-receita h2 {
-
             color: #d63765;
-
             font-size: 1.2rem;
-
         }
 
         .card-receita p {
-
             color: #5f4b4b;
-
         }
 
         .botao-receita {
-
             display: inline-block;
-
             background-color: #d63765;
-
             color: #fbf5e9 !important;
-
             padding: 10px 15px;
-
             margin-top: 10px;
-
             text-decoration: none !important;
-
             font-family: Georgia, 'Times New Roman', Times, serif;
-
             font-weight: bold;
-
             border: none;
-
         }
 
         .botao-receita:hover {
-
             background-color: #d63765;
-
             color: #fbf5e9 !important;
-
             text-decoration: none !important;
-
             opacity: 0.8;
-
         }
 
         @media (max-width: 700px) {
-
             main {
-
                 padding: 0 25px 35px;
-
             }
 
             .pesquisa {
-
                 flex-direction: column;
-
             }
 
             .pesquisa input[type="search"] {
-
                 width: 100%;
-
             }
-
         }
 
     </style>
@@ -238,7 +152,7 @@ require_once __DIR__ . '/../login/verificaUser.php';
 <body>
 
     <?php include __DIR__ . '/../includes/header.php'; ?>
- <!-- Incluindo o header -->
+
 
     <main>
 
@@ -246,34 +160,16 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
         <form action="" method="post" class="pesquisa">
 
-            <input
+            <input type="search" name="pesquisar" id="pesquisar" placeholder="Digite o nome da receita">
 
-                type="search"
-
-                name="pesquisar"
-
-                id="pesquisar"
-
-                placeholder="Digite o nome da receita"
-
-            >
-
-            <input
-
-                type="submit"
-
-                value="Pesquisar"
-
-            >
+            <input type="submit" value="Pesquisar">
 
         </form>
 
         <?php
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
-            pesquisar($pdo, $_POST['pesquisar']);
-
+        if ($_SERVER['REQUEST_METHOD'] == "POST") { //se  o usuario tiver enviados dados através do método post, execute:
+            pesquisar($pdo, $_POST['pesquisar']);//chama a função pesquisar e dá parametros a ela se conectar com o banco e fazer uma requisição post com o campo pesquisar
         }
 
         ?>

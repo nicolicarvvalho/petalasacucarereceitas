@@ -3,59 +3,61 @@ require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
-$receita = null;
-$erro = '';
-$sucesso = '';
+$receita = null;// por enquanto essavariável está vazia
+$erro = ''; //essa também está vazia
+$sucesso = '';//e essa também
 
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {
-    $nome = $_POST['nome'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {// se o usuario estiver logado e fazer uma requisição do método post e tiver feito uma requisição post no campo pesquisar, execute:
+    $nome = $_POST['nome'] ?? ''; //guarda na variável post o resultado do ternário: se o nome existir gurde nessa variável, senão deixe vazia
 
-    $sql = "SELECT * FROM receitas WHERE LOWER(nome) = LOWER(:nome)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":nome", $nome);
-    $stmt->execute();
+    $sql = "SELECT * FROM receitas WHERE LOWER(nome) = LOWER(:nome)";// a função lower transforma tudo que é maisuculo em minusculo porque o postgres é case sensitive. Aqui estou falando para o banco selecionar todos os nomes na tabela receitas. O banco pega o nome da receita que está guardado lá na tabela e transforma em minúsculo. A parte depois do igual o banco pega o que o usuário digitou e faz uma comparação "o que está no banco é igual ao que o usuário digitou?"
 
-    $receita = $stmt->fetch(PDO::FETCH_ASSOC);
+    //stmt é uma instrução
+    $stmt = $pdo->prepare($sql);//aqui está sendo enviado uma instrução para o banco de dodos preparar uma consulta
+    $stmt->bindParam(":nome", $nome); // estou pedindo ao php que pegue o valor que estiver dentro da variável $nome e coloque no lugar do espaço reservado :nome
+    $stmt->execute();//execute a busca
 
-    if (!$receita) {
+    $receita = $stmt->fetch(PDO::FETCH_ASSOC);//aqui o fetch() vai até o banco e pega apenas a primeira linha que encontrou. O PDO::FETCH_ASSOC: É uma configuração que diz ao PHP como ele deve organizar esses dados. Sem ele o php traria os dados bagunçados e duplicados. Com ele, o php transforma aquela linha do banco em um array organizado e guarda na variável receita.
+
+    if (!$receita) { //se não existir a variável receita, fale:
         $erro = "Receita não encontrada.";
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
-    $id = $_POST['id'];
-    $usuario_id = $_SESSION['usuario_id'];
+if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o usuário estiver logqado e fizer uma requisição do tipo post e tiver clicado em atualizar, execute:
+    $id = $_POST['id']; // guarde na variavel id, o id da receita
+    $usuario_id = $_SESSION['usuario_id'];//aqui guarde nessa variável o id do usuario que iniciou a sessão
 
     if (empty($_POST['nome']) || empty($_POST['categoria']) || empty($_POST['ingredientes']) || empty($_POST['modo_preparo']) || empty($_POST['tempo']) || empty($_POST['diiculdade'])) {
-        $erro = "Preencha todos os campos obrigatórios antes de atualizar a receita.";
+        $erro = "Preencha todos os campos obrigatórios antes de atualizar a receita.";//se o nome, categoria, ingredientes ou todas as outras coisas que estão aqui em cima estiverem vazias, mostre o erro. Os dois pipes servem para não precisar abrir vários if
 
-        $sql = "SELECT * FROM receitas WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        $receita = $stmt->fetch(PDO::FETCH_ASSOC);
-    } else {
+        $sql = "SELECT * FROM receitas WHERE id = :id"; //guarde na variavel sql tudo que o banco achou de id na tabela receitas onde o id é o que o usuario escreveu
+        $stmt = $pdo->prepare($sql); //prepare a consulta com o comando que eu falei aqui em cima
+        $stmt->bindParam(":id", $id); //Quando eu falar para vc executar a busca , pegue o valor que estiver dentro da variavel id e coloque no lugar da etiqueta :id
+        $stmt->execute();//execute isso
+        $receita = $stmt->fetch(PDO::FETCH_ASSOC);//guarde na variável receita a primeira linha que você encontrou
+    }
+     else {//senão, guarde nas variáveis abaixo o que o usuario digiou nos formulários que forma enviados do tipo post:
         $categoria = $_POST['categoria'];
         $nome = $_POST['nome'];
         $ingredientes = $_POST['ingredientes'];
         $modo_preparo = $_POST['modo_preparo'];
         $tempo = $_POST['tempo'];
         $unidade = $_POST['unidade'];
-        $tempo_preparo = $tempo . ' ' . $unidade;
+        $tempo_preparo = $tempo . ' ' . $unidade; //aqui estou concatenando o tempo com a unidade e guardando na variável tempo_preparo
         $diiculdade = $_POST['diiculdade'];
 
         $imagem = $_POST['imagem_atual'];
 
-        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
-            $nomeImagem = basename($_FILES['imagem']['name']);
-            $pasta = __DIR__ . '/../imagens/receitas/';
-            $caminhoImagem = $pasta . $nomeImagem;
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {//se existir alguma imagem anexada e a imagem não estiver com erro, significa que o upload está certo
+            $nomeImagem = basename($_FILES['imagem']['name']);//aqui estou falando que é para guardar na variável nomeImagem o arquivo com o nome e estou pedindo para desconsiderar o caminho que veio com ela.
+            $pasta = __DIR__ . '/../imagens/receitas/'; //aqui estou criando uma variável que contem o caminho que vai ficar a imagem que o usuario colocou
+            $caminhoImagem = $pasta . $nomeImagem; //aqui criei outra variavel que vai ter o caminho da imagem com o nome dela
 
             move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem);
-            $imagem = $nomeImagem;
+            $imagem = $nomeImagem; // quando o usuario manda uma foto o php pega a foto e coloca em uma pasta temorária, se eu não tirar de lá a foto vai ser excluida. Para isso não acontecer tem que mover o arquivo carregado (move_uploaded_file). esse $_FILES['imagem']['tmp_name'] é o lugar temporário onde a foto está escondida. Estou falando para pegar a imagem que está nesse lugar temporário e colocar na variável que foi criada ali em cima.
         }
-
-        try {
+        try { //tente atualizar a tabela receitas onde os campos abaixo foram mudados e o id é igual ao id da receita
             $sql = "UPDATE receitas 
                     SET categoria = :categoria,
                         nome = :nome,
@@ -64,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
                         tempo_preparo = :tempo_preparo,
                         imagem = :imagem,
                         diiculdade = :diiculdade
-                    WHERE id = :id";
+                    WHERE id = :id"; 
 
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(":categoria", $categoria);
+            $stmt = $pdo->prepare($sql); //prepare a consulta na tabela
+            $stmt->bindParam(":categoria", $categoria); //mude os dados que foram alterados aqui e nos outros aqui em baixo
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":ingredientes", $ingredientes);
             $stmt->bindParam(":modo_preparo", $modo_preparo);
@@ -75,30 +77,34 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {
             $stmt->bindParam(":imagem", $imagem);
             $stmt->bindParam(":diiculdade", $diiculdade);
             $stmt->bindParam(":id", $id);
-            $stmt->execute();
+            $stmt->execute();//execute isso
 
-            $sucesso = "Receita atualizada com sucesso!";
+            //tratamento de erros:
+            //se qualquer linha acima tiver dado algum erro aparece o erro $e que contém a mensagem de erro especificando o tipo de erro
+            $sucesso = "Receita atualizada com sucesso!";//gurda a frase nessa variável
         } catch (PDOException $e) {
-            $erro = "Erro ao atualizar receita: " . $e->getMessage();
+            $erro = "Erro ao atualizar receita: " . $e->getMessage(); //nessa linha em vez de deixar o PHP travar a página inteira e mostrar aquele erro feio para o usuario do seu site, você captura o erro e o guarda de forma organizada dentro da variável $erro
         }
 
         // Recarrega os dados atualizados da receita para manter o formulário exibido e preenchido
-        $sql = "SELECT * FROM receitas WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        $receita = $stmt->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM receitas WHERE id = :id";//pegue tudo na tabela receitas onde o id é o id da receita que o usuario digitou
+        $stmt = $pdo->prepare($sql);//prepare a consulta
+        $stmt->bindParam(":id", $id);//quando eu disser que é para executar pegue o id da receita e guarde na variavel id
+        $stmt->execute();//execute
+        $receita = $stmt->fetch(PDO::FETCH_ASSOC); //guarde na variável receita a primeira linha que você encontrou
     }
 }
 
 // Extrai o valor numérico e a unidade do tempo_preparo (ex: "30 minutos")
-$tempoNum = '';
-$tempoUnidade = 'minutos';
-if ($receita && !empty($receita['tempo_preparo'])) {
-    $partesTempo = explode(' ', trim($receita['tempo_preparo']));
-    $tempoNum = $partesTempo[0] ?? '';
-    if (isset($partesTempo[1])) {
-        $tempoUnidade = strtolower($partesTempo[1]);
+$tempoNum = '';//essa variável começa vazia
+$tempoUnidade = 'minutos'; //se não tiver nada salvo, a variável tornará padrão minutos
+if ($receita && !empty($receita['tempo_preparo'])) { //se tiver algo na variável receita e se não tiver vazio o campo tempo_preparo, execute:
+    $partesTempo = explode(' ', trim($receita['tempo_preparo'])); // explode corta o texto em pedaços usando o espaço em branco ' ' como tesoura e o trim remove espaços em branco desnecessários no começo ou no fim do texto (exemplo " 45 minutos " em "45 minutos"). 
+    //Essa linha ficaria tipo assim : se o texto for "45 minutos", a variável $partesTempo vira um array com duas partes: o índice 0 vira "45" e o índice 1 vira "minutos".
+    $tempoNum = $partesTempo[0] ?? ''; //essa variável guarda o resultado do ternário. Se o indice for 0 guarda na variável, senão deixa vazia
+    if (isset($partesTempo[1])) { //aqui está verificando se existe uma segunda parte que é o tempo
+        $tempoUnidade = strtolower($partesTempo[1]); // a função strtolower transforma a unidade em letras minúsculas. Assim, se no banco estava salvo "Minutos" ou "MINUTOS", o PHP padroniza para "minutos" e salva na variável tempoUndade.
+
     }
 }
 ?>
@@ -378,16 +384,17 @@ if ($receita && !empty($receita['tempo_preparo'])) {
 
         <h1>Atualizar Receita</h1>
 
-        <?php if ($erro != ''): ?>
-            <p class="erro"><?php echo htmlspecialchars($erro); ?></p>
+        <?php if ($erro != ''): ?> <!-- Se a variável erro for diferente de vazia, execute: -->
+            <p class="erro"><?php echo htmlspecialchars($erro); ?></p> <!-- Exiba a mensagem de erro -->
         <?php endif; ?>
 
-        <?php if ($sucesso != ''): ?>
-            <p class="sucesso"><?php echo htmlspecialchars($sucesso); ?></p>
+        <?php if ($sucesso != ''): ?> <!-- Se a variavel sucesso for diferente de vazia, execute: --> 
+            <p class="sucesso"><?php echo htmlspecialchars($sucesso); ?></p> <!-- Exiba a mensagem de sucesso -->
         <?php endif; ?>
 
-        <?php if ($receita == null): ?>
+        <?php if ($receita == null): ?> <!-- Se a variável receita estiver vazia, execute: -->
 
+        <!-- Exibe o formulário de pesquisar receita: -->
             <form action="update.php" method="POST">
 
                 <div class="formulario">
@@ -405,18 +412,20 @@ if ($receita && !empty($receita['tempo_preparo'])) {
 
             </form>
 
-        <?php else: ?>
+        <?php else: ?><!-- senão (se a variável tiver dados que o fetch mandou), renderiza esse formulário completo: -->
 
-            <form action="update.php" method="POST" enctype="multipart/form-data">
+            <form action="update.php" method="POST" enctype="multipart/form-data"><!-- sem o enctype="multipart/form-data", o navegador não consegue enviar arquivos. Ele é obrigatório para o upload de fotos funcionar.
+-->
 
                 <div class="formulario">
 
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($receita['id']); ?>">
-                    <input type="hidden" name="imagem_atual" value="<?php echo htmlspecialchars($receita['imagem'] ?? ''); ?>">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($receita['id']); ?>"><!-- Esse hidden deixa o id escondido, precisa ter o id pois é com ele que acontece a busca no banco -->
+                    <input type="hidden" name="imagem_atual" value="<?php echo htmlspecialchars($receita['imagem'] ?? ''); ?>"> <!-- guarda o nome da foto antiga. Se o usuário decidir não mudar a foto da receita, o PHP usa esse valor para não apagar a imagem que já existia. -->
 
-                    <div class="campo nome-campo">
+
+                    <div class="campo nome-campo"><!-- a mesma coisa acontece aqui -->
                         <label for="nome">Nome da receita:</label>
-                        <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($receita['nome']); ?>" required>
+                        <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($receita['nome']); ?>" required> 
                     </div>
 
                     <div class="campo categoria-campo">
@@ -450,14 +459,14 @@ if ($receita && !empty($receita['tempo_preparo'])) {
                         <label for="dificuldade">Dificuldade:</label>
 
                         <div class="opcoes">
-                            <input type="radio" id="opcao1" name="diiculdade" value="valor1" <?php if (($receita['diiculdade'] ?? '') == 'valor1') echo 'checked'; ?>>
-                            <label for="opcao1">Fácil</label>
+                            <input type="radio" id="opcao1" name="diiculdade" value="facil" <?php if (($receita['diiculdade'] ?? '') == 'facil') echo 'checked'; ?>>
+                            <label for="facil">Fácil</label>
 
-                            <input type="radio" id="opcao2" name="diiculdade" value="valor2" <?php if (($receita['diiculdade'] ?? '') == 'valor2') echo 'checked'; ?>>
-                            <label for="opcao2">Médio</label>
+                            <input type="radio" id="opcao2" name="diiculdade" value="medio" <?php if (($receita['diiculdade'] ?? '') == 'medio') echo 'checked'; ?>>
+                            <label for="medio">Médio</label>
 
-                            <input type="radio" id="opcao3" name="diiculdade" value="valor3" <?php if (($receita['diiculdade'] ?? '') == 'valor3') echo 'checked'; ?>>
-                            <label for="opcao3">Difícil</label>
+                            <input type="radio" id="opcao3" name="diiculdade" value="dificil" <?php if (($receita['diiculdade'] ?? '') == 'dificil') echo 'checked'; ?>>
+                            <label for="dificil">Difícil</label>
                         </div>
                     </div>
 
@@ -484,7 +493,7 @@ if ($receita && !empty($receita['tempo_preparo'])) {
             </form>
 
         <?php endif; ?>
-
+        
     </main>
 
 

@@ -4,26 +4,25 @@ require_once __DIR__ . '/../database/conexao.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../login/verificaUser.php';
 
-$usuario_id = $_SESSION['usuario_id'];
+$usuario_id = $_SESSION['usuario_id']; //guarda na variável usuario_id a sessão que o usuario começou
 
-$usuario = consulta_id($pdo, $usuario_id);
+$usuario = consulta_id($pdo, $usuario_id); //guarda na variável usuario o resultado da função consulta_id
 
-if (isset($_POST['excluir_perfil'])) {
+if (isset($_POST['excluir_perfil'])) { //se o botão de excluir perfil for clicado
 
-    if (excluirUsuario($pdo, $usuario_id)) {
+    if (excluirUsuario($pdo, $usuario_id)) { //se a função excluir usuario funcionar
 
-        session_unset();
-        session_destroy();
+        session_unset();//apaga os dados do usuario da sessão
+        session_destroy();//destroi os dados
 
-        header("Location: ../login/entrar.php");
+        header("Location: ../login/cadastrar.php");//redireciona para a página de cadastrar
         exit();
     }
 }
 
-// Pega apenas o nome do ficheiro da foto (evita duplicar 'perfil/' se já existir no banco)
-$nome_foto = !empty($usuario['fotoperfil']) ? basename($usuario['fotoperfil']) : 'padrao.png';
+$nome_foto = !empty($usuario['fotoperfil']) ? basename($usuario['fotoperfil']) : '../imagens/perfil/padrao.png';//guarda na variavel nome_foto: se a foto de perfil do usuario estiver perfil e ele não tiver colocado nenhuma foto, automaticamente dá ao usuario a foto de perfil padrão
 
-$base = '../';
+$base = '../';//variavelque guarda uma parte do caminho
 ?>
 
 
@@ -111,17 +110,15 @@ $base = '../';
 
         <h1>Meu Perfil</h1>
 
-        <!-- Aponta diretamente para a pasta imagens/perfil/ no servidor -->
-        <img src="../imagens/perfil/<?php echo $nome_foto; ?>" alt="Foto de perfil" class="foto-perfil">
+        <img src="../imagens/perfil/<?php echo $nome_foto; ?>" alt="Foto de perfil" class="foto-perfil"><!--mostra o caminho que está guardada a foto e mostra ela -->
 
         <p class="email">
-            E-mail: <?php echo htmlspecialchars($usuario['email'] ?? ''); ?>
+            E-mail: <?php echo htmlspecialchars($usuario['email'] ?? ''); ?><!--mostra o caminho do usuario -->
         </p>
 
         <div class="botoes">
 
             <a href="../usuario/editarPerfil.php" class="botao">Editar perfil</a>
-
             <a href="../usuario/excluirPerfil.php" class="botao">Excluir perfil</a>
 
         </div>

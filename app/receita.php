@@ -19,7 +19,7 @@ if ($id != '') {//se o id for diferente de vazio, execute:
 
     $stmt->execute();//O PHP envia para o postgres o valor contido na variável $id vinculada no passo anterior.
 
-    $receita = $stmt->fetch(PDO::FETCH_ASSOC);
+    $receita = $stmt->fetch(PDO::FETCH_ASSOC); //Traz a receita encontrada na base de dados e guarda dentro da variável $receita. O PDO::FETCH_ASSOC faz isso virar uma lista organizada. A partir desse momento, é possivel usar $receita['nome'], $receita['ingredientes'], etc., no  HTML.
 }
 
 ?>
@@ -153,25 +153,29 @@ if ($id != '') {//se o id for diferente de vazio, execute:
 
     <main class="principal">
 
-        <?php if ($receita): ?>
+        <?php if ($receita): ?> <!-- se tem a variável receita (que começou vazia), execute: -->
 
-            <h1><?php echo htmlspecialchars($receita['nome']); ?></h1>
+            <h1><?php echo htmlspecialchars($receita['nome']); ?> </h1><!-- mostra o nome dela -->
 
             <div class="conteudo-receita">
 
-                <!-- Quadro da Imagem (Lado Esquerdo) -->
+                <!-- Aqui é o lugar onde a imagem aparece: -->
                 <div class="quadro-imagem">
-                    <?php
-                    $caminho_imagem = "../imagens/receitas/" . $receita['imagem'];
-                    $caminho_disco  = __DIR__ . '/../imagens/receitas/' . $receita['imagem'];
 
-                    if (!empty($receita['imagem']) && file_exists($caminho_disco)):
+                    <?php
+
+                    $caminho_imagem = "../imagens/receitas/" . $receita['imagem'];// isso aqui cria o endereço relativo da imagem. Esse é o endereço que o navegador precisa para conseguir encontrar e carregar a imagem na tela
+                    $caminho_disco  = __DIR__ . '/../imagens/receitas/' . $receita['imagem'];// e aqui cria o caminho absoluto  dentro do disco do servidor (tipo c:/documentos/petalasacucarereceitas/imagens/receitas). esse o PHP precisa do caminho completo do disco para checar se o arquivo realmente existe na pasta antes de tentar mostrá-lo.
+
+                    if (!empty($receita['imagem']) && file_exists($caminho_disco)):// se a imagem não estiver vazia e existir algo na variável cominho_disco, execute: 
                     ?>
-                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" alt="<?php echo htmlspecialchars($receita['nome']); ?>">
+                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" alt="<?php echo htmlspecialchars($receita['nome']); ?>"> <!-- Mostre a imagem que4 está na variavel com o seu nome -->
+
                     <?php endif; ?>
+
                 </div>
 
-                <!-- Detalhes da Receita (Lado Direito) -->
+                <!-- Aqui o o php vai exibir os dados sobre a receita-->
                 <div class="receita">
 
                     <h2>Informações da receita</h2>
@@ -199,7 +203,7 @@ if ($id != '') {//se o id for diferente de vazio, execute:
                     <p>
                         <strong>Modo de preparo:</strong><br>
                         <?php echo nl2br(htmlspecialchars($receita['modo_preparo'])); ?>
-                    </p>
+                    </p> <!-- esse echo nl2br transforma as linhas quebradas em <br> -->
 
                     <a href="select.php" class="voltar">Voltar para receitas</a>
 
@@ -215,7 +219,7 @@ if ($id != '') {//se o id for diferente de vazio, execute:
                 Não foi possível encontrar essa receita.
             </p>
 
-            <a href="select.php" class="voltar">Voltar para receitas</a>
+            <a href="select.php" class="voltar">Voltar para as suas receitas</a>
 
         <?php endif; ?>
 
