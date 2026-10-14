@@ -49,13 +49,13 @@ O dicionário de dados descreve os campos das tabelas, seus tipos e suas finalid
 | --------------- | ---------------- | ------------------------------------------------------------------ |
 | `id`            | SERIAL / INTEGER | Identificador de cada receita. Chave primária.            |
 | `usuario_id`    | INTEGER          | Identifica o usuário associado à receita. Chave estrangeira. |
-| `categoria`     | VARCHAR / TEXT   | Indica a categoria da receita, como doce ou salgado.               |
-| `nome`          | VARCHAR / TEXT   | Armazena o nome da receita.                                        |
+| `categoria`     | VARCHAR    | Indica a categoria da receita, como doce ou salgado.               |
+| `nome`          | VARCHAR    | Armazena o nome da receita.                                        |
 | `ingredientes`  | TEXT             | Armazena os ingredientes necessários para o preparo.               |
 | `modo_preparo`  | TEXT             | Armazena as instruções de preparo.                                   |
-| `tempo_preparo` | VARCHAR / TEXT   | Registra o tempo necessário para preparar a receita.               |
+| `tempo_preparo` |  TEXT   | Registra o tempo necessário para preparar a receita.               |
 | `imagem`        | TEXT             | Armazena o caminho da imagem.              |
-| `diiculdade`    | VARCHAR / TEXT   | Registra o nível de dificuldade da receita.                        |
+| `diiculdade`    | VARCHAR    | Registra o nível de dificuldade da receita.                        |
 
 **Observação:** o campo `diiculdade` foi mantido para ter consistência com o que está no banco de dados.
 
@@ -74,6 +74,7 @@ O CRUD representa as quatro operações fundamentais para manipulação de dados
 ## 6. Organização do código
 
 ### Estrutura do projeto:
+
 ```text
 petalasacucarereceitas/
 ├── .gitignore

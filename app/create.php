@@ -8,7 +8,13 @@ require_once __DIR__ . '/../login/verificaUser.php';
 
 $erro = ''; // essa variavel tem uma string vazia
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') { //SERVER é uma variável super global do php, ela não precisa ser declarada antes de usar e pode ser 'chamada' em qualquer lugar do código. o REQUEST_METHOD é o índice que estou usando para acessar uma informação da variável SERVER. essa super global pode guardar várias informações mas para esse caso, preciso apenas a REQUEST_METHOD. Esse REQUEST_METHOD informa qual método HTTP foi usado, nesse caso é o POST, quando o usuário entra na página do site acontece uma requisição GET mas ao enviar o formulário acontece o POST. É como se essa linha falasse "se o método a requisição for POST execute isso:"
+if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
+    
+echo '<pre>';
+var_dump($_FILES['foto'] ?? null);
+echo '</pre>';
+exit;
+//SERVER é uma variável super global do php, ela não precisa ser declarada antes de usar e pode ser 'chamada' em qualquer lugar do código. o REQUEST_METHOD é o índice que estou usando para acessar uma informação da variável SERVER. essa super global pode guardar várias informações mas para esse caso, preciso apenas a REQUEST_METHOD. Esse REQUEST_METHOD informa qual método HTTP foi usado, nesse caso é o POST, quando o usuário entra na página do site acontece uma requisição GET mas ao enviar o formulário acontece o POST. É como se essa linha falasse "se o método a requisição for POST execute isso:"
 
     // Pega o ID do usuário que está logado
     $usuario_id = $_SESSION['usuario_id']; // Essa SESSION é outra super global porém essa guarda as informações da sessão do usuáro. Uma sessão permite que o php guarde informações do usuário enquanto ele navega pelo sistema. Usando de exemplo esse próprio site, quando um usuário faz login ele automaticamente recebe um id. A SESSION guarda esse id. Isso tudo é guardado na variável usuario_id
@@ -49,10 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') { //SERVER é uma variável super glob
 
         $caminho = $pasta . $nome_imagem;//$caminho é uma variável que vai armazenar o caminho completo do arquivo. Ele concatena a variável que guarda o caminho com o nome que foi criado ali em cima.
 
-        if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminho)) {// move_uploaded_file() é uma função do PHP que move um arquivo enviado por upload do local temporário para o destino indicado. Ela recebe 2 argumentos, um é a variável super global FILES que tem a entrada do campo da foto e o caminho temporário em que o PHP colocou o arquivo recebido. O segundo argumento é a variável que tem o caminho da foto.  Essa condição verifica se existe um arquivo enviado pelo campo chamado foto e se o envio não teve erro. As duas condições precisam ser verdadeiras para que execute o que está dentro das chaves. A variável lá em cima começa vazia, se uma imagem for enviada e salva com sucesso, o código altera seu valor. Caso contrário, ela continua vazia.
-            $imagem = $nome_imagem;
-
-        }
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminho)) {
+    $imagem = $nome_imagem;
+} else {
+    $erro = "Não foi possível salvar a imagem.";
+}
 
     }
 
