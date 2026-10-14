@@ -1,4 +1,4 @@
-# Documentação de Software — Pétalas, Açúcar e Receitas
+# Documentação Técnica — Pétalas, Açúcar e Receitas
 
 ## 1. Apresentação do sistema
 O **Pétalas, Açúcar e Receitas** é um sistema web desenvolvido para o gerenciamento de receitas culinárias. O projeto permite que os usuários organizem suas receitas e gerenciem suas informações pessoais por meio de uma interface simples.
@@ -57,7 +57,7 @@ O dicionário de dados descreve os campos das tabelas, seus tipos e suas finalid
 | `imagem`        | TEXT             | Armazena o caminho da imagem.              |
 | `diiculdade`    | VARCHAR / TEXT   | Registra o nível de dificuldade da receita.                        |
 
-**Observação:** o campo `diiculdade` foi mantido para manter do jeito que está no banco de dados.
+**Observação:** o campo `diiculdade` foi mantido para ter consistência com o que está no banco de dados.
 
 ## 5. Operações CRUD
 
@@ -89,8 +89,9 @@ petalasacucarereceitas/
 │   ├── select_w.php
 │   └── update.php
 ├── database/
-│   ├── conexao.php
-│   └── connect.php
+|   ├── estrutura.sql
+│   └── conexao.php
+|
 ├── documentacao/
 │   ├── diagrama.md
 │   └── documentacao.md

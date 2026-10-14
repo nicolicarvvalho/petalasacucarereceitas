@@ -1,4 +1,4 @@
-# 🌸 Pétalas, Açúcar e Receitas
+# Pétalas, Açúcar e Receitas
 
 ## 1. Sobre o projeto
 
@@ -45,6 +45,12 @@ php -m
 
 Procure por `pdo_pgsql` na lista apresentada.
 
+Se ela não aparecer na lista, abra o arquivo de configuração do PHP (php.ini) e remova o ponto e vírgula `;` do início da linha:
+
+```bash
+extension=pdo_pgsql
+```
+
 ## 3. Como acessar e executar o projeto
 
 ### 3.1. Clonar o repositório
@@ -72,45 +78,74 @@ https://www.postgresql.org/download/
 
 Selecione o sistema operacional e siga as instruções de instalação. Durante o processo, defina uma senha para o usuário administrador `postgres` e guarde-a em um local seguro.
 
-### 3.3. Criar o banco de dados
+
+### 3.3. Criar usuário e banco de dados
+
+Abra o terminal e execute:
+
+Se estiver usando Linux ou MacOS: 
+
+```bash
+sudo -u postgres psql
+```
+
+Se estiver usando Windows:
+
+```bash
+psql -U postgres
+```
+
+Dentro do terminal do Postgres, execute os comandos abaixo para criar o usuário e o banco de dados:
+
+```sql
+CREATE USER administrador WITH PASSWORD 'digite_uma_senha';
+```
+
+```sql
+CREATE DATABASE petalas WITH OWNER administrador;
+```
+
+Para sair do terminal do PostgreSQL, digite:
+
+```sql
+\q
+```
+
+### 3.4. Importar o dump do banco de dados
+
+O dump facilita a preparação do banco sem precisar criar manualmente cada tabela. Se o banco e o usuário já existirem, pule o passo anterior e execute diretamente a importação abaixo.
 
 Abra o terminal e execute:
 
 ```bash
-psql -U administrador -c "CREATE DATABASE petalas;"
+psql -U administrador -h 127.0.0.1 -d petalas -f database/estrutura.sql
 ```
 
-Esse comando cria o banco de dados.
-Se o banco já existir, utilize o banco existente em vez de executar novamente o comando.
+Digite a senha quando for necessário.
 
-### 3.4. Importar o dump do banco de dados
-
-O dump facilita a preparação do banco sem precisar criar manualmente cada tabela. Execute:
-
-```bash
-psql -U administrador -d petalas -f database/dump_petalas.sql
-```
-
-Digite a senha do PostgreSQL quando precisar.
 
 
 ### 3.5. Criar e configurar o arquivo `config.php`
 
-O arquivo `config.php` contém as informações necessárias para conectar o PHP ao banco de dados PostgreSQL. Como esse arquivo não está disponível no repositório, crie manualmente:
+O arquivo `config.php` contém as informações necessárias para conectar o PHP ao banco de dados PostgreSQL. Como esse arquivo não está disponível no meu repositório, crie manualmente:
 
 1. Abra a pasta principal do projeto no Visual Studio Code.
-2. Crie um novo arquivo chamado `config.php`.
+2. Crie um arquivo chamado `config.php`.
 3. Copie o código abaixo e cole no arquivo:
 
 ```php
-define('DB_HOST', 'localhost');
+<?php
+
+define('DB_HOST', '127.0.0.1');
 define('DB_PORT', '5432');
 define('DB_NAME', 'petalas');
 define('DB_USER', 'administrador');
 define('DB_PASS', 'sua_senha');
+
+?>
 ```
 
-4. Substitua `sua_senha` pela senha definida durante a instalação do PostgreSQL.
+4. Substitua `sua_senha` pela senha definida durante o passo 3.3.
 5. Salve o arquivo.
 
 As configurações devem corresponder ao PostgreSQL instalado no computador. Se você utilizou uma porta, um usuário ou um nome de banco diferentes, ajuste os valores conforme necessário.
@@ -150,3 +185,9 @@ Após acessar a aplicação, realize os seguintes testes:
 
 * O PostgreSQL precisa estar em execução para que o sistema acesse o banco de dados.
 * A conexão configurada em `config.php` deve corresponder aos dados do banco instalado.
+
+## 6. Informações complementares
+- [Documentação Técnica](documentacao/documentacao.md)
+- [Diagrama de relacionamento](documentacao/diagrama.md)
+- [Product Backlog](https://linear.app/projetofinal/project/petalas-acucar-e-receitas-9b657913146c/issues?layout=list&ordering=priority&orderingDirection=desc&grouping=workflowState&subGrouping=none&showCompletedIssues=all&showSubIssues=true&showTriageIssues=true)
+- [Prototipagem](https://canva.link/tlsakvw5v8xo6uz)
