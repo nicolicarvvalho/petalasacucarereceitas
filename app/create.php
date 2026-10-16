@@ -10,10 +10,6 @@ $erro = ''; // essa variavel tem uma string vazia
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
     
-echo '<pre>';
-var_dump($_FILES['foto'] ?? null);
-echo '</pre>';
-exit;
 //SERVER é uma variável super global do php, ela não precisa ser declarada antes de usar e pode ser 'chamada' em qualquer lugar do código. o REQUEST_METHOD é o índice que estou usando para acessar uma informação da variável SERVER. essa super global pode guardar várias informações mas para esse caso, preciso apenas a REQUEST_METHOD. Esse REQUEST_METHOD informa qual método HTTP foi usado, nesse caso é o POST, quando o usuário entra na página do site acontece uma requisição GET mas ao enviar o formulário acontece o POST. É como se essa linha falasse "se o método a requisição for POST execute isso:"
 
     // Pega o ID do usuário que está logado
