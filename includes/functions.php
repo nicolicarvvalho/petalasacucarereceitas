@@ -84,9 +84,9 @@ function verTodas($pdo, $usuario_id, $nome = '') {//da parametros para a funçã
             echo "<div class='card-receita'>";//cria o cartão
 
             if (!empty($receita['imagem'])) {//se a imagem que está dentro da receita não estiver vazia, execute:
-                echo "<img src='../imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem da receita'>"; //mostra o caminho da pasta para onde a imagem deve ir
+                echo "<img src='/petalasacucarereceitas/imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem da receita'>"; //mostra o caminho da pasta para onde a imagem deve ir
             } else {//senão, se o usuario não tenha enviado nenhuma foto na hora de cadastrar, o else carrega uma imagem padrão do sistema (placeholder.png), deixando o design sempre bonito e uniforme.
-                echo "<img src='../imagens/placeholder.png' alt='Sem imagem'>";//fala que não tem imagem
+                echo "<img src='/petalasacucarereceitas/imagens/placeholder.png' alt='Sem imagem'>";//fala que não tem imagem
             }
 
             echo "<h2>" . htmlspecialchars($receita['nome']) . "</h2>";//mostra o nome
@@ -158,14 +158,14 @@ function pesquisar($conexao, $nome){ //criando a função pesquisar e dando para
         foreach ($receitas as $receita) {//foreach percorre os arrays que estão na variavel receitas e coloca temporariamente na variavel receita
             echo "<div class='card-receita'>"; //cria um cartão por receita
 
-            $caminhoFisico = __DIR__ . '/../' . ($receita['imagem'] ?? ''); //coloca na variavel caminhoFisico o caminho 
+            $caminhoFisico = __DIR__ . '/../imagens/receitas/' . ($receita['imagem'] ?? ''); //coloca na variavel caminhoFisico o caminho 
 
             // Verifica se existe imagem cadastrada e se o arquivo  realmente existe na pasta, senão usa a imagem padrão/placeholder:
             if (!empty($receita['imagem']) && file_exists($caminhoFisico)) {//se a receita tiver imagem e o arquivo existir de verdade execute:
-                echo "<img src='../" . htmlspecialchars($receita['imagem']) . "' alt='Imagem de " . htmlspecialchars($receita['nome']) . "'>"; //mostra onde a imagem deve ficar
+                echo "<img src='imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem de " . htmlspecialchars($receita['nome']) . "'>"; //mostra onde a imagem deve ficar
 
             } else { //senão
-                echo "<img src='../imagens/placeholder.png' alt='Imagem não inserida'>"; // mostra a foto padrão quando o usuário não tiver adicionado foto ou o arquivo sumiu da pasta
+                echo "<img src='imagens/placeholder.png' alt='Imagem não inserida'>"; // mostra a foto padrão quando o usuário não tiver adicionado foto ou o arquivo sumiu da pasta
             }
 
             //aqui vai mostrar as informações da receita:

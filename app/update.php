@@ -373,6 +373,14 @@ if ($receita && !empty($receita['tempo_preparo'])) { //se tiver algo na variáve
                 grid-column: 1;
             }
         }
+
+        .foto .aviso-tamanho {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #d63765;
+            margin-bottom: 8px;
+        }
+
     </style>
 </head>
 
@@ -447,6 +455,7 @@ if ($receita && !empty($receita['tempo_preparo'])) { //se tiver algo na variáve
 
                     <div class="foto">
                         <label for="foto">Adicione uma foto:</label>
+                        <span class="aviso-tamanho">Tamanho máximo da imagem: 1 MB</span>
                         <input type="file" id="foto" name="imagem" accept="image/*">
                     </div>
 

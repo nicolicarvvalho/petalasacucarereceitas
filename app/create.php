@@ -39,14 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Se o usuário escolheu uma imagem:
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) { //isset(): função que verifica se uma variável ou índice existe e não está vazia. FILE é outra variável super global, mas essa armazena informações dos arquivos que foram enviados pelo usuario por meio do formulário. o colchete com 'foto' dentro tem ligação com o campo do formulário que chama foto. && significa E. ['error']: acessa o código de erro associado ao envio do arquivo. 0 aqui indica que o PHP não registrou erro no envio do arquivo. Ou seja, a condição verifica se a entrada foto existe e se o envio não apresentou erro. Se esse for o caso executa:
 
+        if ($_FILES['foto']['size'] > 1048576) { // 1048576 bytes = 1 MB
+            $erro = "A imagem selecionada é maior que o limite permitido de 1 MB.";    
+            } else {
         $pasta = __DIR__ . '/../imagens/receitas/';// a variável pasta guarda o caminho de destino da imagem que foi anexada pelo usuário.
-
         // Cria a pasta caso ela ainda não exista
         if (!is_dir($pasta)) { //is_dir() é uma função que verifica se o caminho informado corresponde a um diretório existente mas como tem um sinal de exclamação no inicio, o if significa "se o diretorio da variável pasta não existe, execute:"
-
-            mkdir($pasta, 0777, true);//mkdir cria um diretorio, a variável é o caminho que vai ser criado, 0777 é a permissão que significa que o dono, o grupo e qualquer outro usuário do sistema possuem acesso total de leitura, escrita e execução do arquivo. se o PHP não tiver permissão para criar ou modificar arquivos naquela pasta, o envio das imagens pode falhar.
-        }
-
+                    mkdir($pasta, 0777, true);//mkdir cria um diretorio, a variável é o caminho que vai ser criado, 0777 é a permissão que significa que o dono, o grupo e qualquer outro usuário do sistema possuem acesso total de leitura, escrita e execução do arquivo. se o PHP não tiver permissão para criar ou modificar arquivos naquela pasta, o envio das imagens pode falhar.
+            }
+            }
         $nome_imagem = time() . '_' . basename($_FILES['foto']['name']); //aqui está criando um nome para a imagem. $nome_imagem é a variável que receberá o nome final do arquivo. time() é uma função do PHP que retorna o timestamp Unix atual, ou seja, o número de segundos desde 1º de janeiro de 1970, em UTC. O _ é uma string contendo um sublinhado, usado para separar o timestamp do nome original. basename() é uma função que extrai a parte final de um caminho. Aqui, é usada para obter o nome do arquivo enviado. $_FILES['foto']['name'] contém o nome original do arquivo recebido pelo PHP. Essa parte do código é importante pois pode ser que 2 usuários coloquem o mesmo nome da receita, para evitar conflitos bvem um número no nome da foto, esse número é decidido conforme o tempo ficaria tipo assim "1791493250_bolo.jpg"
 
         $caminho = $pasta . $nome_imagem;//$caminho é uma variável que vai armazenar o caminho completo do arquivo. Ele concatena a variável que guarda o caminho com o nome que foi criado ali em cima.
@@ -352,6 +353,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-bottom: 25px;
         }
 
+        .foto .aviso-tamanho {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #d63765;
+            margin-bottom: 8px;
+}
     </style>
 
 </head>
@@ -411,7 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="foto">
 
                     <label for="foto">Adicione uma foto:</label>
-
+                    <span class="aviso-tamanho">Tamanho máximo da imagem: 1 MB</span>
                     <input type="file" id="foto" name="foto" accept="image/*" capture="user">
 
                 </div>
@@ -419,7 +427,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="preparo">
 
                     <label for="modo-preparo">Modo de Preparo:</label>
-
                     <textarea id="modo-preparo" name="modo-preparo" placeholder="Explique passo a passo de como preparar a receita"></textarea>
 
                 </div>
