@@ -159,7 +159,14 @@ Na pasta principal do projeto, execute:
 php -S localhost:8000
 ```
 
+Caso as imagens das receitas não sejam exibidas devido a problemas de permissão no servidor Linux, acesse o diretório que contém a pasta principal do projeto e execute o comando abaixo:
 
+```bash
+chmod 777 petalasacucarereceitas/imagens/receitas/
+```
+
+Esse comando concede permissões de leitura, escrita e execução para todos os usuários na pasta imagens/receitas/, permitindo o acesso aos arquivos armazenados nela.
+ 
 ### 3.7. Acessar pelo navegador
 
 Com o servidor em execução, abra o navegador e acesse:
@@ -190,4 +197,4 @@ Após acessar a aplicação, realize os seguintes testes:
 - [Documentação Técnica](documentacao/documentacao.md)
 - [Diagrama de relacionamento](documentacao/diagrama.md)
 - [Product Backlog](https://linear.app/projetofinal/project/petalas-acucar-e-receitas-9b657913146c/issues?layout=list&ordering=priority&orderingDirection=desc&grouping=workflowState&subGrouping=none&showCompletedIssues=all&showSubIssues=true&showTriageIssues=true)
-- [Prototipagem](https://canva.link/tlsakvw5v8xo6uz)
+- [Prototipagem](https://www.figma.com/design/2zER6Y7FDChJ0DUE2YtdKN/P%C3%A9talas--A%C3%A7%C3%BAcar-e-Receitas?node-id=0-1&t=XIWeDhd1oJTaH8Da-1)

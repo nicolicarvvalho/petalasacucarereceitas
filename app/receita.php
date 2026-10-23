@@ -68,22 +68,6 @@ if ($id != '') {//se o id for diferente de vazio, execute:
             align-items: flex-start;
         }
 
-        /* Quadro da foto com borda rosa */
-        .quadro-imagem {
-            width: 280px;
-            height: 280px;
-            flex-shrink: 0;
-            border: 2px solid #d63765;
-            background-color: #f0e5d2;
-        }
-
-        .quadro-imagem img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
         /* Container do bloco de dados da receita */
         .receita {
             flex: 1;
@@ -126,17 +110,11 @@ if ($id != '') {//se o id for diferente de vazio, execute:
             font-weight: bold;
         }
 
-        /* Adaptador para telas menores/celulares */
+        /* Adaptador para telas menores e celulares */
         @media (max-width: 768px) {
             .conteudo-receita {
                 flex-direction: column;
                 align-items: center;
-            }
-
-            .quadro-imagem {
-                width: 100%;
-                max-width: 320px;
-                height: 260px;
             }
 
             .receita {
@@ -158,22 +136,6 @@ if ($id != '') {//se o id for diferente de vazio, execute:
             <h1><?php echo htmlspecialchars($receita['nome']); ?> </h1><!-- mostra o nome dela -->
 
             <div class="conteudo-receita">
-
-                <!-- Aqui é o lugar onde a imagem aparece: -->
-                <div class="quadro-imagem">
-
-                    <?php
-
-                    $caminho_imagem = "../imagens/receitas/" . $receita['imagem'];// isso aqui cria o endereço relativo da imagem. Esse é o endereço que o navegador precisa para conseguir encontrar e carregar a imagem na tela
-                    $caminho_disco  = __DIR__ . '/../imagens/receitas/' . $receita['imagem'];// e aqui cria o caminho absoluto  dentro do disco do servidor (tipo c:/documentos/petalasacucarereceitas/imagens/receitas). esse o PHP precisa do caminho completo do disco para checar se o arquivo realmente existe na pasta antes de tentar mostrá-lo.
-
-                    if (!empty($receita['imagem']) && file_exists($caminho_disco)):// se a imagem não estiver vazia e existir algo na variável cominho_disco, execute: 
-                    ?>
-                        <img src="<?php echo htmlspecialchars($caminho_imagem); ?>" alt="<?php echo htmlspecialchars($receita['nome']); ?>"> <!-- Mostre a imagem que4 está na variavel com o seu nome -->
-
-                    <?php endif; ?>
-
-                </div>
 
                 <!-- Aqui o o php vai exibir os dados sobre a receita-->
                 <div class="receita">

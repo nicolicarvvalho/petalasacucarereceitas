@@ -83,7 +83,9 @@ function verTodas($pdo, $usuario_id, $nome = '') {//da parametros para a funçã
 
             echo "<div class='card-receita'>";//cria o cartão
 
-            if (!empty($receita['imagem'])) {//se a imagem que está dentro da receita não estiver vazia, execute:
+        $caminhoFisico = __DIR__ . '/../imagens/receitas/' . ($receita['imagem'] ?? '');
+
+            if (!empty($receita['imagem']) && file_exists($caminhoFisico)) {//se a imagem que está dentro da receita não estiver vazia, execute:
                 echo "<img src='/petalasacucarereceitas/imagens/receitas/" . htmlspecialchars($receita['imagem']) . "' alt='Imagem da receita'>"; //mostra o caminho da pasta para onde a imagem deve ir
             } else {//senão, se o usuario não tenha enviado nenhuma foto na hora de cadastrar, o else carrega uma imagem padrão do sistema (placeholder.png), deixando o design sempre bonito e uniforme.
                 echo "<img src='/petalasacucarereceitas/imagens/placeholder.png' alt='Sem imagem'>";//fala que não tem imagem
