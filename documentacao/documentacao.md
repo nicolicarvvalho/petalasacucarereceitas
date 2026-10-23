@@ -145,4 +145,4 @@ O Product Backlog reúne as funcionalidades, melhorias e tarefas planejadas para
 ### Prototipagem
 A prototipagem apresenta a estrutura planejada para o sistema, incluindo a organização das páginas, os elementos e a navegação entre as telas.
 
-[Acesse a Prototipagem aqui](https://canva.link/tlsakvw5v8xo6uz)
+[Acesse a Prototipagem aqui](https://www.figma.com/design/2zER6Y7FDChJ0DUE2YtdKN/P%C3%A9talas--A%C3%A7%C3%BAcar-e-Receitas?node-id=0-1&t=XIWeDhd1oJTaH8Da-1)
