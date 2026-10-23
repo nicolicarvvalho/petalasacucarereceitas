@@ -1,5 +1,17 @@
 # Documentação Técnica — Pétalas, Açúcar e Receitas
 
+## Sumário
+
+- [1. Apresentação do sistema](#1-apresentação-do-sistema)
+- [2. Funcionalidades](#2-funcionalidades)
+- [3. Estrutura do banco de dados](#3-estrutura-do-banco-de-dados)
+- [4. Dicionário de dados](#4-dicionário-de-dados)
+- [5. Operações CRUD](#5-operações-crud)
+- [6. Organização do código](#6-organização-do-código)
+- [7. Segurança e validação](#7-segurança-e-validação)
+- [8. Recursos do projeto](#8-recursos-do-projeto)
+
+
 ## 1. Apresentação do sistema
 O **Pétalas, Açúcar e Receitas** é um sistema web desenvolvido para o gerenciamento de receitas culinárias. O projeto permite que os usuários organizem suas receitas e gerenciem suas informações pessoais por meio de uma interface simples.
 
@@ -57,7 +69,7 @@ O dicionário de dados descreve os campos das tabelas, seus tipos e suas finalid
 | `imagem`        | TEXT             | Armazena o caminho da imagem.              |
 | `diiculdade`    | VARCHAR    | Registra o nível de dificuldade da receita.                        |
 
-**Observação:** o campo `diiculdade` foi mantido para ter consistência com o que está no banco de dados.
+**Observação:** o nome do campo diiculdade foi mantido conforme definido no banco de dados, garantindo a correspondência entre a documentação e a estrutura implementada..
 
 ## 5. Operações CRUD
 
