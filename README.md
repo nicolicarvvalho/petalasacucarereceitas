@@ -1,5 +1,5 @@
 <div align="center>
-    <img src="imagens/logos.png" alt="Logo Pétalas, Açúcar e Receitas" width="100">
+    <img src="./imagens/logos.png" alt="Logo Pétalas, Açúcar e Receitas" width="100">
 </div>
 
 # Pétalas, Açúcar e Receitas
