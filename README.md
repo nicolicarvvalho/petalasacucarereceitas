@@ -1,4 +1,4 @@
-<div align="center>
+<div align="center">
     <img width="150" alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/1d3b27bf-3120-4007-9d42-315c7958e9bd" />
 </div>
 
