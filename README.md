@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="300" alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/1d3b27bf-3120-4007-9d42-315c7958e9bd" />
+<img width="100%" alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/792e2c13-d743-480f-99a1-c58dde89911e" />
 </div>
 
 # Pétalas, Açúcar e Receitas
@@ -203,3 +203,7 @@ Após acessar a aplicação, realize os seguintes testes:
 - [Diagrama de relacionamento](documentacao/diagrama.md)
 - [Product Backlog](https://linear.app/projetofinal/project/petalas-acucar-e-receitas-9b657913146c/issues?layout=list&ordering=priority&orderingDirection=desc&grouping=workflowState&subGrouping=none&showCompletedIssues=all&showSubIssues=true&showTriageIssues=true)
 - [Prototipagem](https://www.figma.com/design/2zER6Y7FDChJ0DUE2YtdKN/P%C3%A9talas--A%C3%A7%C3%BAcar-e-Receitas?node-id=0-1&t=XIWeDhd1oJTaH8Da-1)
+
+<div align="center">
+<img width="100%"alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/8ba04dbe-5e8b-4fbf-83a2-1abd30f8e678" />
+</div>
