@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="200" alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/792e2c13-d743-480f-99a1-c58dde89911e" />
+<img width="1200" height="250" alt="logo Pétalas, Açúcar e Receitas" src="https://github.com/user-attachments/assets/792e2c13-d743-480f-99a1-c58dde89911e" />
 </div>
 
 # Pétalas, Açúcar e Receitas
