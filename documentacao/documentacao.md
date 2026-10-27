@@ -289,3 +289,6 @@ O script SQL utilizado para estruturar o banco de dados está disponível no arq
 | 1.4 | 14/10/2026 | Finalização das instruções e execução do projeto. | Nicoli |
 | 1.5 | 22/10/2026 | Organização do sumário e revisão da documentação técnica. | Nicoli |
 | 1.6 | 27/10/2026 | Revisão da documentação técnica e do README. | Nicoli |
+
+
+**Desenvolvido por Nicoli Carvalho — Pétalas, Açúcar e Receitas.**
