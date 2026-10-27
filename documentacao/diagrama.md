@@ -1,26 +1,25 @@
-```Mermaid
 ---
 Banco de Dados Pétalas
 ---
 erDiagram
 
-USUARIOS {
-    int ID PK
-    varchar email
-    varchar senha
-    text fotoperfil
-}
+    USUARIOS {
+        INTEGER id PK
+        VARCHAR email
+        VARCHAR senha
+        TEXT fotoperfil
+    }
 
-RECEITAS {
-    int ID PK
-    usuario_id FK
-    categoria varchar
-    nome varchar
-    ingredientes text
-    modo_preparo text
-    tempo_preparo varchar
-    diiculdade varchar
-    imagem text
-}
+    RECEITAS {
+        INTEGER id PK
+        INTEGER usuario_id
+        VARCHAR categoria
+        VARCHAR nome
+        TEXT ingredientes
+        TEXT modo_preparo
+        VARCHAR tempo_preparo
+        VARCHAR diiculdade
+        TEXT imagem
+    }
 
- USUARIOS ||--o{ RECEITAS : "possuem"
+    USUARIOS ||--o{ RECEITAS : "possuem"

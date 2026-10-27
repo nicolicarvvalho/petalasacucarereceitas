@@ -4,6 +4,7 @@
 
 1. [Apresentação do sistema](#1-apresentação-do-sistema)
 2. [Funcionalidades](#2-funcionalidades)
+   - [Levantamento de requisitos](#23-levantamento-de-requisitos)
 3. [Estrutura do banco de dados](#3-estrutura-do-banco-de-dados)
 4. [Dicionário de dados](#4-dicionário-de-dados)
 5. [Operações CRUD](#5-operações-crud)
@@ -37,6 +38,43 @@ O projeto foi desenvolvido utilizando PHP, HTML, CSS e PostgreSQL. A comunicaç�
 - Atualização das informações de uma receita.
 - Exclusão de receitas.
 - Armazenamento de informações como nome, categoria, ingredientes, modo de preparo, tempo de preparo, dificuldade e imagem.
+
+### 2.3. Levantamento de requisitos
+
+O levantamento de requisitos identifica as funcionalidades que o sistema deve oferecer, as condições de funcionamento e as regras que orientam seu uso.
+
+#### 2.3.1. Requisitos funcionais (RF)
+
+Os requisitos funcionais descrevem as ações que o sistema deve permitir ao usuário.
+
+- **RF01 — Cadastro de usuários:** permitir que novos usuários criem uma conta.
+- **RF02 — Autenticação:** permitir que usuários cadastrados façam login e encerrem sua sessão.
+- **RF03 — Gerenciamento do perfil:** permitir a edição das informações pessoais, incluindo e-mail, senha e foto de perfil.
+- **RF04 — Cadastro de receitas:** permitir o cadastro de receitas com informações como nome, categoria, ingredientes, modo de preparo, tempo de preparo, dificuldade e imagem.
+- **RF05 — Consulta de receitas:** permitir a visualização das receitas cadastradas.
+- **RF06 — Pesquisa de receitas:** permitir a pesquisa de receitas pelo nome.
+- **RF07 — Atualização de receitas:** permitir a alteração das informações de uma receita cadastrada.
+- **RF08 — Exclusão de receitas:** permitir a exclusão de receitas cadastradas.
+
+#### 2.3.2. Requisitos não funcionais (RNF)
+
+Os requisitos não funcionais descrevem características técnicas e condições de funcionamento do sistema.
+
+- **RNF01 — Tecnologia:** o sistema deve ser desenvolvido utilizando PHP, HTML e CSS.
+- **RNF02 — Banco de dados:** o sistema deve utilizar PostgreSQL para armazenar os dados.
+- **RNF03 — Acesso ao banco de dados:** a comunicação entre PHP e PostgreSQL deve ser realizada por meio do PDO.
+- **RNF04 — Usabilidade:** a interface deve organizar as funcionalidades de maneira simples, facilitando a navegação.
+- **RNF05 — Configuração:** as configurações locais de conexão com o banco de dados devem ficar no arquivo `config.php`, que não deve ser enviado ao repositório Git.
+
+#### 2.3.3. Regras de negócio (RN)
+
+As regras de negócio estabelecem condições para o funcionamento das funcionalidades do sistema.
+
+- **RN01 — Cadastro de receitas:** as receitas devem possuir as informações necessárias para seu cadastro, conforme os campos obrigatórios definidos no banco de dados.
+- **RN02 — Identificação dos usuários:** cada usuário deve possuir um identificador próprio, representado pelo campo `id` da tabela `usuarios`.
+- **RN03 — Associação de receitas:** o campo `usuario_id` da tabela `receitas` armazena o identificador do usuário associado à receita.
+- **RN04 — Identificação das receitas:** cada receita deve possuir um identificador próprio, representado pelo campo `id` da tabela `receitas`.
+- **RN05 — Acesso ao sistema:** as páginas que exigem autenticação devem verificar a sessão do usuário, conforme a implementação do sistema.
 
 ## 3. Estrutura do banco de dados
 
@@ -192,7 +230,6 @@ O PDO permite executar consultas SQL e tratar possíveis erros durante a comunic
 
 O arquivo `includes/functions.php` contém todas as funções utilizadas em diferentes partes do sistema, como operações de cadastro, consulta, pesquisa, atualização e exclusão de dados.
 
-
 ### 6.4. Páginas da aplicação
 
 Os arquivos da pasta `app/` correspondem às páginas relacionadas às operações com receitas e à navegação da aplicação.
@@ -213,7 +250,6 @@ O projeto utiliza recursos de PHP e PDO para implementar funcionalidades relacio
 - **Consultas ao banco de dados:** o PDO é utilizado para realizar a comunicação com o PostgreSQL. Quando as consultas utilizam instruções preparadas e parâmetros, isso ajuda a reduzir o risco de SQL Injection.
 - **Validação de dados:** os dados enviados pelos formulários devem ser verificados antes de serem utilizados ou armazenados.
 - **Exibição de conteúdo:** a função `htmlspecialchars()`, quando utilizada na saída de dados, ajuda a evitar que conteúdo fornecido pelo usuário seja interpretado como HTML pelo navegador.
-
 
 ## 8. Recursos do projeto
 
@@ -240,3 +276,15 @@ O diagrama do banco de dados está disponível no arquivo [`diagrama.md`](diagra
 ### 8.4. Script do banco de dados
 
 O script SQL utilizado para estruturar o banco de dados está disponível no arquivo [`estrutura.sql`](../database/estrutura.sql), localizado na pasta `database/`.
+
+## 9. Controle de Versões
+
+| Versão | Data | Alterações realizadas | Autora |
+|:---:|:---:|---|:---:|
+| 1.0 | 25/09/2026 | Início da documentação e da prototipagem, organização das tarefas e criação do DER. | Nicoli |
+| 1.1 | 30/09/2026 | Registro dos requisitos funcionais, requisitos não funcionais e regras de negócio do sistema. | Nicoli |
+| 1.2 | 02/10/2026 | Atualização do diagrama do banco de dados e detalhamento dos campos das tabelas. | Nicoli |
+| 1.3 | 09/10/2026 | Organização dos arquivos. | Nicoli |
+| 1.4 | 14/10/2026 | Finalização das instruções e execução do projeto. | Nicoli |
+| 1.5 | 22/10/2026 | Organização do sumário e revisão da documentação técnica. | Nicoli |
+| 1.6 | 27/10/2026 | Revisão da documentação técnica e do README. | Nicoli |
