@@ -11,6 +11,7 @@
 6. [Organização do código](#6-organização-do-código)
 7. [Segurança e validação](#7-segurança-e-validação)
 8. [Recursos do projeto](#8-recursos-do-projeto)
+9. [Controle de Versões](#9-controle-de-versões)
 
 ---
 
