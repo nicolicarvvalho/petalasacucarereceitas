@@ -291,4 +291,4 @@ O script SQL utilizado para estruturar o banco de dados está disponível no arq
 | 1.6 | 27/10/2026 | Revisão da documentação técnica e do README. | Nicoli |
 
 
-**Desenvolvido por Nicoli Carvalho — Pétalas, Açúcar e Receitas.**
+**Fim da documentação! Desenvolvido por Nicoli Carvalho — Pétalas, Açúcar e Receitas.**
