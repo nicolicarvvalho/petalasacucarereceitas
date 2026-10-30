@@ -10,8 +10,9 @@ function cadastrar($pdo, $usuario_id, $categoria, $nome, $ingredientes, $modo_pr
 
 
     // Verifica se já existe uma receita com esse nome
-    $verifica = $pdo->prepare("SELECT id FROM receitas WHERE LOWER(nome) = LOWER(:nome) LIMIT 1");//cria a variavel verifica e nela prepara uma consulta ao banco de dados para procurar na tabela receitas onde o nome é o nome que o usuário digitou, limitando 1 linha retornada
+    $verifica = $pdo->prepare("SELECT id FROM receitas WHERE LOWER(nome) = LOWER(:nome) AND usuario_id = :usuario_id LIMIT 1");//cria a variavel verifica e nela prepara uma consulta ao banco de dados para procurar na tabela receitas onde o nome é o nome que o usuário digitou, limitando 1 linha retornada
     $verifica->bindParam(":nome", $nome);//quando eu pedir para executar, pegue o valor nome e coloque dentro da variável nome
+    $verifica->bindParam(":usuario_id", $usuario_id);
     $verifica->execute();//execute
 
     if ($verifica->fetch()) {//Se o banco encontrar pelo menos uma linha com o dado ali e cima, o fetch() retorna false: 
@@ -140,13 +141,14 @@ function apagar($conexao, $id)//criando a função apagar e dando parametros a e
 
 
 
-function pesquisar($conexao, $nome){ //criando a função pesquisar e dando parametros a ela: conexão com o banco e o nome da receita
+function pesquisar($conexao, $usuario_id, $nome){ //criando a função pesquisar e dando parametros a ela: conexão com o banco e o nome da receita
 
-    $sql = "SELECT id, usuario_id, categoria, nome, ingredientes, tempo_preparo, modo_preparo, imagem, diiculdade FROM receitas WHERE nome ILIKE :nome ORDER BY nome"; //selecione na tabela receitas tudo isso onde o nome (pode estar com letras maiusculas e minusculas) é o nome que o usuário digitou
+    $sql = "SELECT id, usuario_id, categoria, nome, ingredientes, tempo_preparo, modo_preparo, imagem, diiculdade FROM receitas WHERE usuario_id = :usuario_id AND nome ILIKE :nome ORDER BY nome"; //selecione na tabela receitas tudo isso onde o nome (pode estar com letras maiusculas e minusculas) é o nome que o usuário digitou
 
     try {//tente:
         $stmt = $conexao->prepare($sql);//preparar consulta com o banco
         $nome = "%" . $nome . "%";//coloque em volta do nome %
+        $stmt->bindParam(":usuario_id", $usuario_id);
         $stmt->bindParam(":nome", $nome);//insira dentro da variável nome o nome que o usuário digitou
         $stmt->execute();//e execute
 

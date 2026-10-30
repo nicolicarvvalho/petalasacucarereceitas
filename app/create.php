@@ -383,7 +383,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="formulario">
 
                 <div class="campo">
-
                     <label for="nome">Nome da receita:</label>
 
                     <input type="text" name="nome" id="nome" placeholder="Digite o nome da receita">

@@ -169,7 +169,8 @@ require_once __DIR__ . '/../login/verificaUser.php';
         <?php
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") { //se  o usuario tiver enviados dados através do método post, execute:
-            pesquisar($pdo, $_POST['pesquisar']);//chama a função pesquisar e dá parametros a ela se conectar com o banco e fazer uma requisição post com o campo pesquisar
+            $usuario_id = $_SESSION['usuario_id'];
+            pesquisar($pdo, $usuario_id, $_POST['pesquisar']);//chama a função pesquisar e dá parametros a ela se conectar com o banco e fazer uma requisição post com o campo pesquisar
         }
 
         ?>

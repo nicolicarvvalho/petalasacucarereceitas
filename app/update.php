@@ -9,12 +9,14 @@ $sucesso = '';//e essa também
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {// se o usuario estiver logado e fazer uma requisição do método post e tiver feito uma requisição post no campo pesquisar, execute:
     $nome = $_POST['nome'] ?? ''; //guarda na variável post o resultado do ternário: se o nome existir gurde nessa variável, senão deixe vazia
+    $usuario_id = $_SESSION['usuario_id'];
 
-    $sql = "SELECT * FROM receitas WHERE LOWER(nome) = LOWER(:nome)";// a função lower transforma tudo que é maisuculo em minusculo porque o postgres é case sensitive. Aqui estou falando para o banco selecionar todos os nomes na tabela receitas. O banco pega o nome da receita que está guardado lá na tabela e transforma em minúsculo. A parte depois do igual o banco pega o que o usuário digitou e faz uma comparação "o que está no banco é igual ao que o usuário digitou?"
+    $sql = "SELECT * FROM receitas WHERE LOWER(nome) = LOWER(:nome) AND usuario_id = :usuario_id";// a função lower transforma tudo que é maisuculo em minusculo porque o postgres é case sensitive. Aqui estou falando para o banco selecionar todos os nomes na tabela receitas. O banco pega o nome da receita que está guardado lá na tabela e transforma em minúsculo. A parte depois do igual o banco pega o que o usuário digitou e faz uma comparação "o que está no banco é igual ao que o usuário digitou?"
 
     //stmt é uma instrução
     $stmt = $pdo->prepare($sql);//aqui está sendo enviado uma instrução para o banco de dodos preparar uma consulta
     $stmt->bindParam(":nome", $nome); // estou pedindo ao php que pegue o valor que estiver dentro da variável $nome e coloque no lugar do espaço reservado :nome
+    $stmt->bindParam("usuario_id", $usuario_id);
     $stmt->execute();//execute a busca
 
     $receita = $stmt->fetch(PDO::FETCH_ASSOC);//aqui o fetch() vai até o banco e pega apenas a primeira linha que encontrou. O PDO::FETCH_ASSOC: É uma configuração que diz ao PHP como ele deve organizar esses dados. Sem ele o php traria os dados bagunçados e duplicados. Com ele, o php transforma aquela linha do banco em um array organizado e guarda na variável receita.
@@ -25,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['pesquisar'])) {// se o
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o usuário estiver logqado e fizer uma requisição do tipo post e tiver clicado em atualizar, execute:
-    $id = $_POST['id']; // guarde na variavel id, o id da receita
+    $id = $_POST['id'] ?? ''; // guarde na variavel id, o id da receita
     $usuario_id = $_SESSION['usuario_id'];//aqui guarde nessa variável o id do usuario que iniciou a sessão
 
     if (empty($_POST['nome']) || empty($_POST['categoria']) || empty($_POST['ingredientes']) || empty($_POST['modo_preparo']) || empty($_POST['tempo']) || empty($_POST['diiculdade'])) {
@@ -47,15 +49,23 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o 
         $tempo_preparo = $tempo . ' ' . $unidade; //aqui estou concatenando o tempo com a unidade e guardando na variável tempo_preparo
         $diiculdade = $_POST['diiculdade'];
 
-        $imagem = $_POST['imagem_atual'];
+        $imagem = $_POST['imagem_atual'] ?? '';
 
         if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {//se existir alguma imagem anexada e a imagem não estiver com erro, significa que o upload está certo
-            $nomeImagem = basename($_FILES['imagem']['name']);//aqui estou falando que é para guardar na variável nomeImagem o arquivo com o nome e estou pedindo para desconsiderar o caminho que veio com ela.
+            $nomeImagem = time() . '_' . basename($_FILES['imagem']['name']);//aqui estou falando que é para guardar na variável nomeImagem o arquivo com o nome e estou pedindo para desconsiderar o caminho que veio com ela.
             $pasta = __DIR__ . '/../imagens/receitas/'; //aqui estou criando uma variável que contem o caminho que vai ficar a imagem que o usuario colocou
+
+            if (!is_dir($pasta)){
+                mkdir($pasta, 0777, true);
+            }
+
             $caminhoImagem = $pasta . $nomeImagem; //aqui criei outra variavel que vai ter o caminho da imagem com o nome dela
 
-            move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem);
+            if (move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)) {
             $imagem = $nomeImagem; // quando o usuario manda uma foto o php pega a foto e coloca em uma pasta temorária, se eu não tirar de lá a foto vai ser excluida. Para isso não acontecer tem que mover o arquivo carregado (move_uploaded_file). esse $_FILES['imagem']['tmp_name'] é o lugar temporário onde a foto está escondida. Estou falando para pegar a imagem que está nesse lugar temporário e colocar na variável que foi criada ali em cima.
+            } else {
+                $erro = "Não foi possível salvar a nova imagem na pasta. ";
+            }
         }
         try { //tente atualizar a tabela receitas onde os campos abaixo foram mudados e o id é igual ao id da receita
             $sql = "UPDATE receitas 
@@ -66,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o 
                         tempo_preparo = :tempo_preparo,
                         imagem = :imagem,
                         diiculdade = :diiculdade
-                    WHERE id = :id"; 
+                    WHERE id = :id AND usuario_id = :usuario_id"; 
 
             $stmt = $pdo->prepare($sql); //prepare a consulta na tabela
             $stmt->bindParam(":categoria", $categoria); //mude os dados que foram alterados aqui e nos outros aqui em baixo
@@ -77,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o 
             $stmt->bindParam(":imagem", $imagem);
             $stmt->bindParam(":diiculdade", $diiculdade);
             $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":usuario_id", $usuario_id);
             $stmt->execute();//execute isso
 
             //tratamento de erros:
@@ -90,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['atualizar'])) {//se o 
         $sql = "SELECT * FROM receitas WHERE id = :id";//pegue tudo na tabela receitas onde o id é o id da receita que o usuario digitou
         $stmt = $pdo->prepare($sql);//prepare a consulta
         $stmt->bindParam(":id", $id);//quando eu disser que é para executar pegue o id da receita e guarde na variavel id
+        $stmt->bindParam(":usuario_id", $usuario_id);
         $stmt->execute();//execute
         $receita = $stmt->fetch(PDO::FETCH_ASSOC); //guarde na variável receita a primeira linha que você encontrou
     }

@@ -191,7 +191,7 @@ for ($i = 0; $i < $total; $i++) { //nesse laço de repetição ele adiciona a ca
             <?php
             $fotoNome = !empty($usuario['fotoperfil']) ? basename($usuario['fotoperfil']) : 'placeholder.png';
             ?>
-            <img src="/petalasacucarereceitas/imagens/perfil/<?php echo htmlspecialchars($fotoNome, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil">
+            <img src="../imagens/perfil/<?php echo htmlspecialchars($fotoNome, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil">
             <p>Meu perfil</p>
         </a>
     </div>
